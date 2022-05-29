@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Login page</title>
+<script src="loginAndRegistration.js" charset="utf-8" defer></script>
+<script src="utils.js" charset="utf-8" defer></script>
+
+</head>
+<body>
+	<h1 id="title">Login</h1>
+
+	<form id="loginForm" action="#">
+		<label for="nickname">Username</label><br>
+	    <input type="text" id="nickname" name="nickname" required autofocus autocomplete="on"><br><br>
+	    <label for="loginPassword">Password</label><br>
+	    <input type="password" id="loginPassword" name="loginPassword" required><br><br>
+	    <input type="submit" id="loginButton" value="Login">
+	    <p id="loginError"></p><br>
+	    <p><a id="createAccountLabel">...or create a new account</a></p>
+	 </form>
+	 
+	 <form id="registrationForm" action="#">
+		<label for="mail">E-mail</label><br>
+	    <input type="email" id="mail" name="mail" required autofocus autocomplete="on"><br><br>
+	    <label for="username">Username</label><br>
+	    <input type="text" id="username" name="username" required><br><br>
+	    <label for="registrationPassword">Password</label><br>
+	    <input type="password" id="registrationPassword" name="registrationPassword" required><br><br>
+	    <label for="confirmPassword">Repeat password</label><br>
+	    <input type="password" id="confirmPassword" name="confirmPassword" required><br><br>
+	    <input type="button" id="registrationButton" value="Confirm">
+	    <p id="registrationError"></p><br>
+	    <p>Already a user? <a id="alreadyUserLabel">Login</a></p>
+	 </form>
+
+</body>
+</html>
