@@ -7,6 +7,7 @@
 	var alreadyUserLabel = document.getElementById("alreadyUserLabel");
 	var registrationPassword = document.getElementById("registrationPassword");
 	var confirmPassword = document.getElementById("confirmPassword");
+	var mail = document.getElementById("mail");
 
 		//Imposto la view iniziale
 		registrationForm.style.display = "none";
@@ -100,6 +101,21 @@
 		confirmPassword.addEventListener("input", (e)=>{
 			let error = document.getElementById("confirmPasswordError");
 			if ((confirmPassword.value === registrationPassword.value)) {
+				error.style.display = "none";
+			}
+		})
+		
+		mail.addEventListener("focusout", (e)=>{
+			let error = document.getElementById("mailError");
+			if (!validateMail(mail.value)) {
+				error.textContent = "Mail non valida";
+				error.style.display = "inline";
+			}
+		})
+		
+		mail.addEventListener("input", (e)=>{
+			let error = document.getElementById("mailError");
+			if (validateMail(mail.value)) {
 				error.style.display = "none";
 			}
 		})

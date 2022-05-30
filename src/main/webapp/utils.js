@@ -12,4 +12,12 @@ function makeCall(method, url, formElement, cback, reset = true) {
 	    if (formElement !== null && reset === true) {
 	      formElement.reset();
 	    }
-	  }
+}
+
+function validateMail(mail) {
+			if (mail.match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/)) {
+				return true;
+			} else {
+				return false;
+			}
+}
