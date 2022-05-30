@@ -40,14 +40,15 @@
 		loginButton.addEventListener("click", (e)=>{
 			var form = e.target.closest("form");
 			if (form.checkValidity()) {
-				makeCall("POST", 'CheckLogin', form, function(x) {
-					if (x.readyState === XMLHttpRequest.DONE) {
+				makeCall("POST", 'CheckLogin', e.target.closest("form"), function(x) {
+					if (x.readyState == XMLHttpRequest.DONE) {
 						var message = x.responseText;
+						console.log(x.status);
 						switch(x.status) {
 							case 200:
 								sessionStorage.setItem("username", message);
 								window.location.href = "Home.html";
-								break
+								break;
 							case 400:
 								document.getElementById("loginError").textContent = message;
 								break;
