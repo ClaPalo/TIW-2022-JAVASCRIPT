@@ -8,6 +8,7 @@
 
 		//Imposto la view iniziale
 		registrationForm.style.display = "none";
+		loginForm.style.display = "inline";
 
 		createAccountLabel.style.color = "blue";
 		alreadyUserLabel.style.color = "blue";
@@ -38,9 +39,8 @@
 		})
 
 		loginButton.addEventListener("click", (e)=>{
-			var form = e.target.closest("form");
-			if (form.checkValidity()) {
-				makeCall("POST", 'CheckLogin', form, function(x) {
+			if (loginForm.checkValidity()) {
+				makeCall("POST", "CheckLogin", loginForm, function(x) {
 					if (x.readyState === XMLHttpRequest.DONE) {
 						var message = x.responseText;
 						switch(x.status) {
@@ -65,34 +65,4 @@
 			}
 		})
 
-		 /*
-		loginForm.addEventListener("submit", function(e) {
-			console.log("Ciao");
-			var oData = new FormData(loginForm);
-
-			var oReq = new XMLHttpRequest();
-			oReq.open("POST", "CheckLogin", true);
-			oReq.onreadystatechange = function(x) {
-				if (x.readyState === XMLHttpRequest.DONE) {
-					var message = x.responseText;
-					switch(x.status) {
-						case 200:
-							sessionStorage.setItem("username", message);
-							window.location.href = "Home.html";
-							break
-						case 400:
-							document.getElementById("loginError").textContent = message;
-							break;
-						case 401:
-							document.getElementById("loginError").textContent = message;
-							break;
-						case 500:
-							document.getElementById("loginError").textContent = message;
-							break;
-					}
-				}
-			}
-			oReq.send(oData);
-		}, false);
-	*/
 }) ();
