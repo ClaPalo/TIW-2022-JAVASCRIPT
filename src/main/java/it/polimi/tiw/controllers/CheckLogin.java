@@ -59,7 +59,7 @@ public class CheckLogin extends HttpServlet {
 		username = StringEscapeUtils.escapeJava(request.getParameter("nickname"));
 		password = StringEscapeUtils.escapeJava(request.getParameter("loginPassword"));
 		
-		System.out.println(username + " " + password);
+		System.out.println("Username: " + username + ", password: " + password);
 		
 		if (username == null || password == null || username.isEmpty() || password.isEmpty()) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);

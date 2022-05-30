@@ -5,6 +5,8 @@
 	var loginButton = document.getElementById("loginButton");
 	var createAccountLabel = document.getElementById("createAccountLabel");
 	var alreadyUserLabel = document.getElementById("alreadyUserLabel");
+	var registrationPassword = document.getElementById("registrationPassword");
+	var confirmPassword = document.getElementById("confirmPassword");
 
 		//Imposto la view iniziale
 		registrationForm.style.display = "none";
@@ -12,6 +14,12 @@
 
 		createAccountLabel.style.color = "blue";
 		alreadyUserLabel.style.color = "blue";
+
+	for (let i = 0; i < document.getElementsByClassName("error").length; i++) {
+		let element = document.getElementsByClassName("error").item(i);
+		element.style.display = "none";
+		element.style.color = "red";
+	}
 
 		//Aggiungo i listener
 		createAccountLabel.addEventListener("click", ()=>{
@@ -65,5 +73,37 @@
 				loginForm.reportValidity();
 			}
 		})
+
+		registrationPassword.addEventListener("focusout", (e)=>{
+			let passwordError = document.getElementById("passwordError");
+			if (registrationPassword.value.length < 5) {
+				passwordError.textContent = "La password deve essere di almeno 5 caratteri";
+				passwordError.style.display = "inline";
+			}
+		})
+		
+		registrationPassword.addEventListener("input", (e)=>{
+			let passwordError = document.getElementById("passwordError");
+			if (registrationPassword.value.length >= 5) {
+				passwordError.style.display = "none";
+			}
+		})
+		
+		confirmPassword.addEventListener("focusout", (e)=>{
+			let error = document.getElementById("confirmPasswordError");
+			if (!(confirmPassword.value === registrationPassword.value)) {
+				error.textContent = "Le password devono coincidere";
+				error.style.display = "inline";
+			}
+		})
+		
+		confirmPassword.addEventListener("input", (e)=>{
+			let error = document.getElementById("confirmPasswordError");
+			if ((confirmPassword.value === registrationPassword.value)) {
+				error.style.display = "none";
+			}
+		})
+	
+	
 
 }) ();
