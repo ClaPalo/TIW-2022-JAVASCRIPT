@@ -60,7 +60,7 @@
 		})
 
 		loginButton.addEventListener("click", (e)=>{
-			if (loginForm.checkValidity()) {
+			if (isReadyToSend(registrationForm, document.getElementById("registrationError")) && loginForm.checkValidity()) {
 				let oldUsername = document.getElementById("nickname").value;
 				makeCall("POST", "CheckLogin", loginForm, function(x) {
 					if (x.readyState === XMLHttpRequest.DONE) {
@@ -98,7 +98,7 @@
 		})
 		
 		registrationButton.addEventListener("click", (e)=>{
-			if (registrationForm.checkValidity() && isReadyToSend(registrationForm)) {
+			if (isReadyToSend(registrationForm, document.getElementById("registrationError")) && registrationForm.checkValidity()) {
 				makeCall("POST", "CreateUser", registrationForm, function(x) {
 					if (x.readyState === XMLHttpRequest.DONE) {
 						var message = x.responseText;
@@ -194,16 +194,16 @@
 
 }) ();
 
-function isReadyToSend(form) {
+function isReadyToSend(form, error) {
 	var toCheck = form.getElementsByTagName("input");
 	//Controllo che tutti i campi siano riempiti
 	for (let i = 0; i < toCheck.length; i++) {
 		if (toCheck[i].value.length === 0) {
-			document.getElementById("registrationError").style.display = "inline";
-			document.getElementById("registrationError").textContent = "Tutti i campi sono obbligatori";
+			error.style.display = "inline";
+			error.textContent = "Tutti i campi sono obbligatori";
 			return false;
 		} else {
-			document.getElementById("registrationError").style.display = "none";
+			error.style.display = "none";
 		}
 	}
 	//Controllo che non ci siano errori di inserimento
