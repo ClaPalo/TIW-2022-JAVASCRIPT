@@ -60,7 +60,7 @@
 		})
 
 		loginButton.addEventListener("click", (e)=>{
-			if (isReadyToSend(registrationForm, document.getElementById("registrationError")) && loginForm.checkValidity()) {
+			if (isReadyToSend(loginForm, document.getElementById("loginError")) && loginForm.checkValidity()) {
 				let oldUsername = document.getElementById("nickname").value;
 				makeCall("POST", "CheckLogin", loginForm, function(x) {
 					if (x.readyState === XMLHttpRequest.DONE) {
