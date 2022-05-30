@@ -11,13 +11,15 @@
 	<h1 id="title">Login</h1>
 
 	<form id="loginForm" action="#">
-		<label for="nickname">Username</label><br>
-	    <input type="text" id="nickname" name="nickname" required autofocus autocomplete="on"><br><br>
-	    <label for="loginPassword">Password</label><br>
-	    <input type="password" id="loginPassword" name="loginPassword" required><br><br>
-	    <input type="submit" id="loginButton" value="Login">
-	    <p id="loginError"></p><br>
-	    <p><a id="createAccountLabel">...or create a new account</a></p>
+		<fieldset>
+			<label for="nickname">Username</label><br>
+			<input type="text" id="nickname" name="nickname" required autofocus autocomplete="on"><br><br>
+			<label for="loginPassword">Password</label><br>
+			<input type="password" id="loginPassword" name="loginPassword" required><br><br>
+			<input type="button" id="loginButton" value="Login">
+			<p id="loginError"></p><br>
+			<p><a id="createAccountLabel">...or create a new account</a></p>
+		</fieldset>
 	 </form>
 	 
 	 <form id="registrationForm" action="#">
