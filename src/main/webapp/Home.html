@@ -72,21 +72,50 @@
 				</table></div>
 				<div class="albuminfo">
 					<div class="thumbnails">
-						<label class="prec_button"><button>PREVIOUS</button></label>
+						<label class="prec_button"><button>❮</button></label>
     					<table>
     						<tbody>
 	        					<tr>
-					                <td><a><img src="" alt="img1" width=200></a></td>
-					                <td><img src="" alt="img2" width=200></td>
-					                <td><img src="" alt="img3" width=200></td>
-					                <td><img src="" alt="img4" width=200></td>
-					                <td><img src="" alt="img5" width=200></td>
+					                <td><a><img src="images/arco-trionfo.jpg" alt="img1" width=200></a></td>
+					                <td><img src="images/Big-Ben-London.jpg" alt="img2" width=200></td>
+					                <td><img src="images/London_UK.jpg" alt="img3" width=200></td>
+					                <td><img src="images/london-4.jpg" alt="img4" width=200></td>
+					                <td><img src="images/louvre.jpg" alt="img5" width=200></td>
 			                	<tr>
 		                	</tbody>
         				</table>
-        				<label class="prec_button"><button>NEXT</button></label>
+        				<label class="prec_button"><button>❯</button></label>
 					</div>
 				</div>
 	</div>
+	
+	<div class="darken"></div>
+		
+	<div class="image_window">
+		<img src="images/89.jpg" alt="img1">
+		
+		<table class="comments">
+            <thead><tr>
+                <th align="left">Comments</th>
+                <th></th>
+            </tr></thead>
+            <tbody>
+	            <tr>
+	                <td>Username</td>
+	                <td>Very nice comment</td>
+	            </tr>
+	        </tbody>
+        </table>
+
+        <h4>Leave a comment</h4>
+        <form action="SubmitComment" method="POST">
+            <input type="text" placeholder="Comment..." maxlength="180" name="text" required>
+            <input type="hidden" name="albumId">
+            <input type="hidden" name="imageId">
+            <input type="hidden" name="page">
+            <input type="submit" value="Send">
+        </form>
+	</div>
+	
 </body>
 </html>
