@@ -71,7 +71,7 @@ body {
 }
 
 .albums #id_my_albums {
-	margin-top: 20px;
+	margin-top: 10px;
 	margin-bottom: 20px;
 }
 
@@ -80,6 +80,8 @@ body {
 
 .albuminfo {
 	position:absolute;
+	box-sizing: border-box;
+	width: 85%;
 	top:0;
 	bottom:0;
 	border-bottom: solid;
@@ -88,11 +90,33 @@ body {
 }
 
 .thumbnails {
-	width: 100%;
+	display: table;
+	position: relative;
+	width: 80%;
+	top: 50%;
+	transform: translateY(-50%);
+	margin-left: auto;
+	margin-right: auto;
 	height: 180px;
+	text-align: center;
 }
 
-.image {
-	width: 100%;
+.thumbnails label {
+	display: table-cell;
+	vertical-align: middle;
 }
+
+.thumbnails table {
+	display: table-cell;
+	vertical-align: middle;
+	text-align: center;
+}
+
+.thumbnails table tbody {
+	display: table;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+
 
