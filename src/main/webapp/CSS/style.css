@@ -1,0 +1,87 @@
+html {
+	height: 100%;
+}
+
+body {
+	margin: 0;
+	padding: 0;
+	height: 100%;
+}
+
+.topbar {
+	top: 0;
+	width: 100%;
+	padding-top: 20px;
+	padding-bottom: 20px;
+	border: solid;
+	border-width: thin;
+}
+
+.topbar h1 {
+	display: inline;
+	padding: 20px 30px;
+}
+
+.topbar #welcome {
+	padding: 20px 20px;
+}
+
+.topbar #id_logout {
+	float: right;
+	padding-left: 20px;
+	padding-top: 10px;
+	padding-bottom: 20px;
+	padding-right: 40px;
+}
+
+
+.content {
+	position: absolute;
+	margin-top: 78px;
+	top: 0;
+	bottom: 0;
+	width: 100%;
+}
+
+.albums {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	overflow: scroll;
+	margin: 0;
+	width: 15%;
+	border: solid;
+	border-width: thin;
+}
+
+.albums table {
+	width: 100%;
+}
+
+.albums td {
+	font-size: large;
+}
+
+.albums th {
+	text-align: center;
+	font-size: x-large;
+}
+
+.albums #id_my_albums {
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+
+
+
+
+.albuminfo {
+	position:absolute;
+	top:0;
+	bottom:0;
+	width:100%;
+	border-bottom: solid;
+	border-width: thin;
+	margin-left: 16%;
+}
+
