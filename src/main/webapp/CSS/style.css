@@ -25,9 +25,14 @@ body {
 	margin: 0;
 }
 
-.topbar #welcome {
+.topbar span {
 	padding-top: 5px;
 	font-size: x-large;
+	display: inline-block;
+	white-space: pre;
+}
+
+.topbar #welcome {
 	display: inline-block;
 }
 
@@ -35,6 +40,7 @@ body {
 	float: right;
 	padding-right: 40px;
 	padding-top: 10px;
+	font-size: medium;
 }
 
 
