@@ -18,6 +18,9 @@
 		registrationForm.style.display = "none";
 		loginForm.style.display = "inline";
 		title.textContent = "Login";
+		loginForm.reset();
+		registrationForm.reset();
+		document.getElementById("nickname").focus();
 		document.getElementById("utenteCreato").style.display = "none";
 		for (let i = 0; i < document.getElementsByClassName("error").length; i++) {
 			let element = document.getElementsByClassName("error").item(i);
@@ -34,6 +37,19 @@
 		
 
 		//Aggiungo i listener
+		
+		document.addEventListener("keypress", (e)=>{
+			if (e.keyCode === 13) {
+				var e = document.createEvent("HTMLEvents");
+				e.initEvent("click", false, false);
+				if (loginForm.style.display === "inline") {
+					loginButton.dispatchEvent(e);
+				} else if (registrationForm.style.display === "inline") {
+					registrationButton.dispatchEvent(e);
+				}
+			}
+		}, false)	// Better not to prioritize a HTTP Post as a consequence of a generic "enter" press
+		
 		createAccountLabel.addEventListener("click", ()=>{
 			loginForm.style.display = "none";
 			registrationForm.style.display = "inline";
