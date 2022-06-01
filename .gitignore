@@ -34,3 +34,5 @@ tmp/
 *~.nib
 local.properties
 
+/src/main/webapp/WEB-INF/images/
+/src/main/webapp/images/
