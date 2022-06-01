@@ -2,7 +2,9 @@ package it.polimi.tiw.controllers;
 
 import it.polimi.tiw.beans.User;
 import it.polimi.tiw.beans.Album;
+import it.polimi.tiw.beans.Image;
 import it.polimi.tiw.dao.AlbumDAO;
+import it.polimi.tiw.dao.ImageDAO;
 
 import java.io.IOException;
 
@@ -24,12 +26,12 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 
-@WebServlet("/GetAlbums")
-public class GetAlbums extends HttpServlet {
+@WebServlet("/GetAlbumImages")
+public class GetImages extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private Connection connection;
 	
-	public GetAlbums() {
+	public GetImages() {
 		super();
 	}
 	
@@ -42,31 +44,27 @@ public class GetAlbums extends HttpServlet {
 		ServletContext context = getServletContext();
 		HttpSession session = request.getSession();
 		
-		User user = (User) session.getAttribute("user");
-		String albumsAreMine = request.getParameter("myalbums");
+		Integer albumId = null;
 		
-		System.out.println(albumsAreMine);
-		
-		if (albumsAreMine == null || (!albumsAreMine.equals("true") && !albumsAreMine.equals("false"))) {
+		try {
+			albumId = Integer.parseInt(request.getParameter("id"));
+		} catch (NumberFormatException | NullPointerException e) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return;
 		}
 		
-		AlbumDAO albumDAO = new AlbumDAO(this.connection);
-		List<Album> albumsToSend = null;
+		ImageDAO imageDAO = new ImageDAO(this.connection);
+		List<Image> imagesToSend = null;
 		
 		try {
-			if (albumsAreMine.equals("true"))
-				albumsToSend = albumDAO.getAlbumsByUser(user.getId(), true);
-			else
-				albumsToSend = albumDAO.getAlbumsByUser(user.getId(), false);
+			imagesToSend = imageDAO.getImagesByAlbum(albumId);
 		} catch (SQLException e) {
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 			return;
 		}
 		
 		Gson gson = new GsonBuilder().create();
-		String json = gson.toJson(albumsToSend);
+		String json = gson.toJson(imagesToSend);
 		
 		response.setStatus(HttpServletResponse.SC_OK);
 		response.setContentType("application/json");

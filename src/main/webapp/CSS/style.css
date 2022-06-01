@@ -96,6 +96,12 @@ body {
 	margin-left: 15%;
 }
 
+.metadata {
+	margin-left: auto;
+	margin-right: auto;
+	text-align: center;
+}
+
 .thumbnails {
 	display: table;
 	position: relative;
@@ -165,5 +171,9 @@ body {
 
 .image_window h4, .image_window form {
 	text-align: left;
+}
+
+a {
+	color: black;
 }
 

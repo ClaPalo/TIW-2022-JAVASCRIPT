@@ -24,12 +24,12 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 
-@WebServlet("/GetAlbums")
-public class GetAlbums extends HttpServlet {
+@WebServlet("/GetAlbumInfo")
+public class GetAlbumInfo extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private Connection connection;
 	
-	public GetAlbums() {
+	public GetAlbumInfo() {
 		super();
 	}
 	
@@ -43,30 +43,33 @@ public class GetAlbums extends HttpServlet {
 		HttpSession session = request.getSession();
 		
 		User user = (User) session.getAttribute("user");
-		String albumsAreMine = request.getParameter("myalbums");
 		
-		System.out.println(albumsAreMine);
+		Integer albumId = null;
 		
-		if (albumsAreMine == null || (!albumsAreMine.equals("true") && !albumsAreMine.equals("false"))) {
+		try {
+			albumId = Integer.parseInt(request.getParameter("id"));
+		} catch (NumberFormatException | NullPointerException e) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return;
 		}
 		
 		AlbumDAO albumDAO = new AlbumDAO(this.connection);
-		List<Album> albumsToSend = null;
+		Album albumToSend = null;
 		
 		try {
-			if (albumsAreMine.equals("true"))
-				albumsToSend = albumDAO.getAlbumsByUser(user.getId(), true);
-			else
-				albumsToSend = albumDAO.getAlbumsByUser(user.getId(), false);
+			albumToSend = albumDAO.getAlbumById(albumId);
 		} catch (SQLException e) {
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 			return;
 		}
 		
+		if (albumToSend == null) {
+			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			return;
+		}
+		
 		Gson gson = new GsonBuilder().create();
-		String json = gson.toJson(albumsToSend);
+		String json = gson.toJson(albumToSend);
 		
 		response.setStatus(HttpServletResponse.SC_OK);
 		response.setContentType("application/json");
