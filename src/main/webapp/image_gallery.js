@@ -92,8 +92,7 @@
 		
 		this.updateView = function(arrayAlbums, container) {
 	      var elem, i, row, titlecell, anchor, titleText;
-	      this.myAlbumsContainer.innerHTML = ""; // empty the tables body
-	      this.otherAlbumsContainer.innerHTML = "";
+	      container.innerHTML = ""; // empty the tables body
 	      var container_visibleinscope = container;
 	      // build updated lists
 	      arrayAlbums.forEach(function(album) {
