@@ -21,3 +21,13 @@ function validateMail(mail) {
 				return false;
 			}
 }
+
+function darken(should_be_dark) {
+	darkRectangle = document.getElementById("id_dark");
+	
+	if (should_be_dark === true) {
+		darkRectangle.style.visibility = "visible";
+	} else {
+		darkRectangle.style.visibility = "hidden";
+	}
+}

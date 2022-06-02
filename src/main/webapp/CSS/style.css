@@ -107,7 +107,7 @@ body {
 	position: relative;
 	width: 80%;
 	top: 50%;
-	transform: translateY(-50%);
+	transform: translateY(-90%);
 	margin-left: auto;
 	margin-right: auto;
 	height: 180px;
@@ -142,7 +142,7 @@ body {
 	opacity: 50%;
 }
 
-.image_window {
+.image_window_with_close {
 	visibility: hidden;
 	position: absolute;
 	box-sizing: border-box;
@@ -156,14 +156,33 @@ body {
 	border-radius: 10px;
 	border-width: thin;
 	background-color: #fff;
-	overflow: scroll;
-	text-align: center;
 	padding: 20px;
 }
 
+.close {
+	text-align: right;
+}
+
+.close img {
+	cursor: pointer;
+}
+
+.image_window {
+	position: absolute;
+	overflow: scroll;
+	top: 30px;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	text-align: center;
+	margin: 35px;
+}
+
+/*
 .image_window img {
 	padding-top: 30px;
 }
+*/
 
 .comments {
 	text-align: left;

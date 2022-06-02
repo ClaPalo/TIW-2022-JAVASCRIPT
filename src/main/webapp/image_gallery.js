@@ -1,7 +1,7 @@
 (function() { 
 	
 	// page components
-	  let albumList, albumInfo, albumThumbnails, username,
+	  let albumList, albumInfo, albumThumbnails, imageWindow, username,
 	    pageOrchestrator = new PageOrchestrator(); // main controller
 	  window.addEventListener("load", () => {
 	    if (sessionStorage.getItem("username") == null) {
@@ -27,6 +27,12 @@
 			
 			albumThumbnails = new AlbumThumbnails(	document.getElementById("id_thumbnails_with_buttons"),
 													document.getElementById("id_thumbnails"));
+													
+			imageWindow = new ImageWindow(	document.getElementById("id_image_window_with_close"),
+											document.getElementById("id_image_window"),
+											document.getElementById("id_close"));
+											
+			imageWindow.registerEvents();
 			
 			document.querySelector("a[href='Logout']").addEventListener('click', () => {
 	        window.sessionStorage.removeItem('username');
@@ -172,6 +178,7 @@
 						images.forEach(function (image) {
 							let image_to_add = new Image();
 							image_to_add.src = image.imgPath.substr(1);
+							image_to_add.id = image.id;
 							self.images.push(image_to_add);
 						});
 						self.show(0);
@@ -228,6 +235,11 @@
 				    imagetag.setAttribute("width", 200);
 					
 					this.thumbnailsContainer.appendChild(imagecell);
+					
+					
+					imagetag.addEventListener("mouseover", function(e) {
+						imageWindow.show(e.target.getAttribute("src"));
+					}, false)
 				}
 				
 				if ((page+1)*5 < this.images.length) {
@@ -259,7 +271,33 @@
 			}
 			this.thumbnailsContainer.innerHTML = "";
 		}
+	}
+	
+	function ImageWindow(imageWindowWithCloseButtonContainer, imageWindowContainer, closeButtonContainer) {
+		this.imageWindowWithCloseButtonContainer = imageWindowWithCloseButtonContainer;
+		this.imageWindowContainer = imageWindowContainer;
+		this.closeButtonContainer = closeButtonContainer;
 		
+		this.show = function(image_src) {
+			
+			var imageTag = document.createElement("img");
+			imageTag.setAttribute("src", image_src);
+			
+			this.imageWindowWithCloseButtonContainer.style.visibility = "visible";
+			darken(true);
+			
+			this.imageWindowContainer.insertBefore(imageTag, this.imageWindowContainer.firstChild);
+			
+		}
+		
+		this.registerEvents = function() {
+			var self = this;
+			this.closeButtonContainer.addEventListener("click", function() {
+				darken(false);
+				self.imageWindowWithCloseButtonContainer.style.visibility = "hidden";
+				self.imageWindowContainer.removeChild(self.imageWindowContainer.firstChild);
+			}, false);
+		}
 	}
 
 }) ();

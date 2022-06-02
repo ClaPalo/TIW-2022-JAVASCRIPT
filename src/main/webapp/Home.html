@@ -50,32 +50,33 @@
 				</div>
 	</div>
 	
-	<div class="darken"></div>
-		
-	<div class="image_window">
-		<img src="images/89.jpg" alt="img1">
-		
-		<table class="comments">
-            <thead><tr>
-                <th align="left">Comments</th>
-                <th></th>
-            </tr></thead>
-            <tbody>
-	            <tr>
-	                <td>Username</td>
-	                <td>Very nice comment</td>
-	            </tr>
-	        </tbody>
-        </table>
-
-        <h4>Leave a comment</h4>
-        <form action="SubmitComment" method="POST">
-            <input type="text" placeholder="Comment..." maxlength="180" name="text" required>
-            <input type="hidden" name="albumId">
-            <input type="hidden" name="imageId">
-            <input type="hidden" name="page">
-            <input type="submit" value="Send">
-        </form>
+	<div id="id_dark" class="darken"></div>
+	
+	<div id="id_image_window_with_close" class="image_window_with_close">
+		<div class="close"><img id="id_close" src="images/close_icon.png" width=30></div>
+		<div id="id_image_window" class="image_window">
+			<table id="id_comments" class="comments">
+	            <thead><tr>
+	                <th align="left">Comments</th>
+	                <th></th>
+	            </tr></thead>
+	            <tbody>
+		            <tr>
+		                <td>Username</td>
+		                <td>Very nice comment</td>
+		            </tr>
+		        </tbody>
+	        </table>
+			
+	        <h4>Leave a comment</h4>
+	        <form action="SubmitComment" method="POST">
+	            <input type="text" placeholder="Comment..." maxlength="180" name="text" required>
+	            <input type="hidden" name="albumId">
+	            <input type="hidden" name="imageId">
+	            <input type="hidden" name="page">
+	            <input type="submit" value="Send">
+	        </form>
+		</div>
 	</div>
 	
 </body>
