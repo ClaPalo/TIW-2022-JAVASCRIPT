@@ -25,9 +25,8 @@
 			
 			albumInfo = new AlbumInfo(document.getElementById("id_album_title"));
 			
-			albumThumbnails = new AlbumThumbnails(	document.getElementById("id_thumbnails"), 
-													document.getElementById("id_prev_button"),
-													document.getElementById("id_next_button"));
+			albumThumbnails = new AlbumThumbnails(	document.getElementById("id_thumbnails_with_buttons"),
+													document.getElementById("id_thumbnails"));
 			
 			document.querySelector("a[href='Logout']").addEventListener('click', () => {
 	        window.sessionStorage.removeItem('username');
@@ -153,12 +152,12 @@
 		
 	}
 	
-	function AlbumThumbnails(thumbnailsContainer, prevButtonContainer, nextButtonContainer) {
+	function AlbumThumbnails(thumbnailsWithButtonsContainer, thumbnailsContainer) {
 		
 		this.images = [];
+		
+		this.thumbnailsWithButtonsContainer = thumbnailsWithButtonsContainer;
 		this.thumbnailsContainer = thumbnailsContainer;
-		this.prevButtonContainer = prevButtonContainer;
-		this.nextButtonContainer = nextButtonContainer;
 		
 		this.loadImages = function(albumID) {
 			var self = this;
@@ -191,13 +190,34 @@
 			if (page < 0 || page*5 > this.images.length) return;
 			
 			this.thumbnailsContainer.innerHTML = "";
-			this.prevButtonContainer.style.visibility = "hidden";
-			this.nextButtonContainer.style.visibility = "hidden";
+			
+			if (document.getElementById("id_prev_button") !== null) {
+				this.thumbnailsWithButtonsContainer.removeChild(document.getElementById("id_prev_button"));
+			}
+			
+			if (document.getElementById("id_next_button") !== null) {
+				this.thumbnailsWithButtonsContainer.removeChild(document.getElementById("id_next_button"));
+			}
 			
 			var self = this;
 			
 			if (this.images.length > 0) {
-				if (page > 0) this.prevButtonContainer.style.visibility = "visible";
+				if (page > 0) {
+					var left_button, left_button_label;
+					
+					left_button_label = document.createElement("label");
+					left_button = document.createElement("button");
+					left_button.textContent = "❮";
+					left_button_label.appendChild(left_button);
+					left_button_label.setAttribute("class", "prev_button");
+					left_button_label.setAttribute("id", "id_prev_button");
+					
+					left_button.addEventListener("click", function() {
+						self.show(page-1);
+					}, false)
+					
+					this.thumbnailsWithButtonsContainer.insertBefore(left_button_label, this.thumbnailsWithButtonsContainer.firstChild);
+				}
 				
 				for (let i=0; i<5 && (i+page*5)<this.images.length; i++) {
 					var imagecell, imagetag;
@@ -206,41 +226,40 @@
 				    imagecell.appendChild(imagetag);
 				    imagetag.setAttribute("src", this.images[5*page + i].src);
 				    imagetag.setAttribute("width", 200);
-				    this.thumbnailsContainer.appendChild(imagecell);
+					
+					this.thumbnailsContainer.appendChild(imagecell);
 				}
 				
-				if ((page+1)*5 < this.images.length) this.nextButtonContainer.style.visibility = "visible";
+				if ((page+1)*5 < this.images.length) {
+					var right_button, right_button_label;
+					
+					right_button_label = document.createElement("label");
+					right_button = document.createElement("button");
+					right_button.textContent = "❯";
+					right_button_label.appendChild(right_button);
+					right_button_label.setAttribute("class", "next_button");
+					right_button_label.setAttribute("id", "id_next_button");
+			
+					right_button.addEventListener("click", function() {
+						self.show(page+1);
+					}, false)
+					
+					this.thumbnailsWithButtonsContainer.appendChild(right_button_label);
+				}
 			}
-			
-			this.prevButtonContainer.addEventListener("click", function() {
-				self.show(page-1);
-			}, false)
-			
-			this.nextButtonContainer.addEventListener("click", function() {
-				self.show(page+1);
-			}, false)
 		}
 		
 		this.reset = function() {
 			this.images = [];
-			this.prevButtonContainer.style.visibility = "hidden";
-			this.nextButtonContainer.style.visibility = "hidden";
+			if (document.getElementById("id_prev_button") !== null) {
+				this.thumbnailsWithButtonsContainer.removeChild(document.getElementById("id_prev_button"));
+			}
+			if (document.getElementById("id_next_button") !== null) {
+				this.thumbnailsWithButtonsContainer.removeChild(document.getElementById("id_next_button"));
+			}
 			this.thumbnailsContainer.innerHTML = "";
 		}
 		
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 
 }) ();
