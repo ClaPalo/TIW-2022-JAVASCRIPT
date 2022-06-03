@@ -35,7 +35,9 @@
 			imageWindow.registerEvents();
 			
 			commentsSection = new CommentsSection(	document.getElementById("id_comments"), 
-													document.getElementById("id_comments_alert"));
+													document.getElementById("id_comments_alert"),
+													document.getElementById("id_submit_comment"),
+													document.getElementById("id_submit_comment_alert"));
 			
 			document.querySelector("a[href='Logout']").addEventListener('click', () => {
 	        window.sessionStorage.removeItem('username');
@@ -293,7 +295,6 @@
 			this.imageWindowContainer.insertBefore(imageTag, this.imageWindowContainer.firstChild);
 			
 			commentsSection.loadComments(imageID);
-			
 		}
 		
 		this.registerEvents = function() {
@@ -307,9 +308,11 @@
 		}
 	}
 	
-	function CommentsSection(commentsTable, commentsAlert) {
+	function CommentsSection(commentsTable, commentsAlert, commentsForm, commentsFormAlert) {
 		this.commentsTable = commentsTable;
 		this.commentsAlert = commentsAlert;
+		this.commentsForm = commentsForm;
+		this.commentsFormAlert = commentsFormAlert;
 		
 		this.loadComments = function(imageID) {
 			var self = this;
@@ -322,19 +325,20 @@
 		                self.commentsAlert.textContent = "No comments for this image yet. Be the first!";
 		                return;
 		              }
-		              self.updateView(comments); // self visible by closure
+		              self.updateView(comments, imageID); // self visible by closure
 		            
 		          	} else {
-		            	self.otherAlbumsAlert.textContent = message;
+		            	self.commentsAlert.textContent = message;
 		          	}
 	          	}
 			});
 		}
 		
-		this.updateView = function(comments) {
+		this.updateView = function(comments, imageId) {
 			var row, usercell, username, textcell, text;
 			var self = this;
-	      	this.commentsTable.innerHTML = ""; // empty the tables body
+			this.reset();
+	      	//this.commentsTable.innerHTML = ""; // empty the tables body
 	      	comments.forEach(function(comment) {
 		        row = document.createElement("tr");
 		        usercell = document.createElement("td");
@@ -348,11 +352,56 @@
 		        
 		        self.commentsTable.appendChild(row);
 		    });
+
+			  let commentInput = document.createElement("input");
+			  commentInput.setAttribute("name", "text");
+			  commentInput.setAttribute("type", "text");
+			  commentInput.setAttribute("placeholder", "Comment...");
+			  commentInput.setAttribute("id", "id_comment_text");
+			  commentInput.setAttribute("maxlength", "180");
+			  let submitButton = document.createElement("button");
+			  submitButton.setAttribute("type", "button");
+			  submitButton.setAttribute("id", "buttonId");
+			  submitButton.textContent = "Send";
+			  commentsForm.appendChild(commentInput);
+			  commentsForm.appendChild(submitButton);
+
+			  this.registerEvents(imageId);
+		}
+
+		this.registerEvents = function(imageId) {
+			var self = this;
+			document.getElementById("buttonId").addEventListener("click", ()=>{
+				let commentText = document.getElementById("id_comment_text").value;
+				if (commentText.length > 0 && commentText.length <= 180 && commentsForm.checkValidity()) {
+					let idValue = document.createElement("input");
+					idValue.style.display = "none";
+					idValue.setAttribute("type", "text");
+					idValue.setAttribute("name", "imageId");
+					idValue.value = imageId;
+					commentsForm.insertBefore(idValue, document.getElementById("id_comment_text"));
+					makeCall("POST", "SubmitComment", this.commentsForm, function(x) {
+						if (x.readyState === XMLHttpRequest.DONE) {
+							var message = x.responseText;
+							switch(x.status) {
+								case 200:
+									self.loadComments(imageId);
+									break;
+								default:
+									console.log(message);
+									self.commentsFormAlert.textContent = "Error while sending the comment, try again";
+									break;
+							}
+						}
+					}, true);
+				}
+			});
 		}
 		
 		this.reset = function() {
 			this.commentsTable.innerHTML = "";
 			this.commentsAlert.innerHTML = "";
+			this.commentsForm.innerHTML = "";
 		}
 		
 	}

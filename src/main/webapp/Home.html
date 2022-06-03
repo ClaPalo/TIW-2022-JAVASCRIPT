@@ -65,20 +65,16 @@
 	            </tr></thead>
 	            <tbody id="id_comments">
 		            <tr>
-		                <td>Username</td>
-		                <td>Very nice comment</td>
 		            </tr>
 		        </tbody>
 	        </table>
 			
 	        <h4>Leave a comment</h4>
-	        <form action="SubmitComment" method="POST">
-	            <input type="text" placeholder="Comment..." maxlength="180" name="text" required>
-	            <input type="hidden" name="albumId">
-	            <input type="hidden" name="imageId">
-	            <input type="hidden" name="page">
+	        <form id="id_submit_comment" action="#">
+	            <input type="text" id="id_comment_text" placeholder="Comment..." maxlength="180" name="text" required>
 	            <input type="submit" value="Send">
 	        </form>
+			<p id="id_submit_comment_alert"></p>
 		</div>
 	</div>
 	

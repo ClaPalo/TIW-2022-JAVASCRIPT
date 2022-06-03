@@ -39,6 +39,8 @@ public class GetComments extends HttpServlet {
 				
 		Integer imageId = null;
 		
+		System.out.println("Ciao");
+		
 		try {
 			imageId = Integer.parseInt(request.getParameter("imageId"));
 		} catch (NumberFormatException | NullPointerException e) {
