@@ -23,7 +23,7 @@ public class AlbumDAO {
 		
 		String operator = thisUser ? "=" : "<>"; 
 		
-		String prepared_query = "SELECT * FROM ALBUM WHERE idUser" + operator + "? ORDER BY date DESC";
+		String prepared_query = "SELECT * FROM Album JOIN OrderTable ON Album.idAlbum = OrderTable.albumId WHERE idUser" + operator + "? ORDER BY position ASC, date DESC";
 		
 		PreparedStatement preparedStatement = this.connection.prepareStatement(prepared_query);
 		preparedStatement.setInt(1, userId);
@@ -62,5 +62,14 @@ public class AlbumDAO {
 		}
 		
 		return album;
+	}
+	
+	public void setAlbumPosition(int albumId, int position) throws SQLException {
+		String prepared_update = "UPDATE OrderTable SET position = ? WHERE albumId = ?";
+		
+		PreparedStatement preparedStatement = this.connection.prepareStatement(prepared_update);
+		preparedStatement.setInt(1, position);
+		preparedStatement.setInt(2, albumId);
+		preparedStatement.executeUpdate();
 	}
 }

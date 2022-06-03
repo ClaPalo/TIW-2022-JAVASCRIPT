@@ -64,6 +64,8 @@
 		this.otherAlbumsAlert = otheralbumsalertContainer;
 		this.myAlbumsContainer = myAlbumsContainer;
 		this.otherAlbumsContainer = otherAlbumsContainer;
+
+		let startElement;
 		
 		this.showMyAlbums = function() {
 			var self = this;
@@ -76,10 +78,10 @@
 		                self.myAlbumsAlert.textContent = "No albums yet! Click on \"Create a new album\" to start.";
 		                return;
 		              }
-		              self.updateView(albums, self.myAlbumsContainer); // self visible by closure
+		              self.updateView(albums, self.myAlbumsContainer, true); // self visible by closure
 		            
 		          	} else {
-		            	self.myAlbumsAlert.textContent = message;
+		            	self.myAlbumsAlert.textContent = unparsed_json;
 		          	}
 	          	}
 			})
@@ -96,22 +98,30 @@
 		                self.otherAlbumsAlert.textContent = "Other users have never created any albums :(";
 		                return;
 		              }
-		              self.updateView(albums, self.otherAlbumsContainer); // self visible by closure
+		              self.updateView(albums, self.otherAlbumsContainer, false); // self visible by closure
 		            
 		          	} else {
-		            	self.otherAlbumsAlert.textContent = message;
+		            	self.otherAlbumsAlert.textContent = unparsed_json;
 		          	}
 	          	}
 			})
 		}
 		
-		this.updateView = function(arrayAlbums, container) {
+		this.updateView = function(arrayAlbums, container, areMyAlbums) {
 	      var elem, i, row, titlecell, anchor, titleText;
 	      container.innerHTML = ""; // empty the tables body
 	      var container_visibleinscope = container;
+		  var self = this;
 	      // build updated lists
 	      arrayAlbums.forEach(function(album) {
 	        row = document.createElement("tr");
+			if (areMyAlbums) {
+				row.draggable = true;
+				row.addEventListener("dragstart", self.dragStart);
+				row.addEventListener("dragover", self.dragOver);
+				row.addEventListener("dragleave", self.dragLeave);
+				row.addEventListener("drop", self.drop);
+			}
 	        titlecell = document.createElement("td");
 	        anchor = document.createElement("a");
 	        titlecell.appendChild(anchor);
@@ -131,6 +141,45 @@
 	      
 	      container.style.visibility = "visible";
 	    }
+
+		this.dragStart = function(event) {
+			startElement = event.target.closest("tr");
+		}
+
+		this.dragOver = function(event) {
+			event.preventDefault();
+			var dest = event.target.closest("tr");
+			dest.className = "selected";
+		}
+
+		this.dragLeave = function(event) {
+			var dest = event.target.closest("tr");
+			dest.className = "notselected";
+		}
+
+		this.drop = function(event) {
+			var dest = event.target.closest("tr");
+
+			// Obtain the index of the row in the table to use it as reference
+			// for changing the dragged element possition
+			var table = dest.closest('table');
+			var rowsArray = Array.from(table.querySelectorAll('tbody > tr'));
+			var indexDest = rowsArray.indexOf(dest);
+
+			// Move the dragged element to the new position
+			if (rowsArray.indexOf(startElement) < indexDest)
+				// If we're moving down, then we insert the element after our reference (indexDest)
+				startElement.parentElement.insertBefore(startElement, rowsArray[indexDest + 1]);
+			else
+				// If we're moving up, then we insert the element before our reference (indexDest)
+				startElement.parentElement.insertBefore(startElement, rowsArray[indexDest]);
+
+			// Mark all rows in "not selected" class to reset previous dragOver
+			for (var i = 0; i < rowsArray.length; i++) {
+				rowsArray[i].className = "notselected";
+			}
+		}
+
 		
 	}
 	

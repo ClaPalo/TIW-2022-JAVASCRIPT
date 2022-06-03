@@ -191,3 +191,12 @@ a {
 	color: black;
 }
 
+.selected > a{
+	color: red;
+}
+
+.notselected > a{
+	color: black;
+}
+
+
