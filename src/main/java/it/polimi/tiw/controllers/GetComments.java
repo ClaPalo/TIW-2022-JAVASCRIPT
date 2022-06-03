@@ -1,7 +1,7 @@
 package it.polimi.tiw.controllers;
 
-import it.polimi.tiw.beans.Album;
-import it.polimi.tiw.dao.AlbumDAO;
+import it.polimi.tiw.beans.Comment;
+import it.polimi.tiw.dao.CommentDAO;
 
 import java.io.IOException;
 
@@ -9,6 +9,9 @@ import java.sql.Connection;
 import it.polimi.tiw.utils.ConnectionHandler;
 import java.sql.SQLException;
 
+import java.util.List;
+
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.annotation.WebServlet;
@@ -19,12 +22,12 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 
-@WebServlet("/GetAlbumInfo")
-public class GetAlbumInfo extends HttpServlet {
+@WebServlet("/GetComments")
+public class GetComments extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private Connection connection;
 	
-	public GetAlbumInfo() {
+	public GetComments() {
 		super();
 	}
 	
@@ -34,32 +37,27 @@ public class GetAlbumInfo extends HttpServlet {
 	
 	public void doGet(HttpServletRequest request, HttpServletResponse response)  throws ServletException, IOException {
 				
-		Integer albumId = null;
+		Integer imageId = null;
 		
 		try {
-			albumId = Integer.parseInt(request.getParameter("id"));
+			imageId = Integer.parseInt(request.getParameter("imageId"));
 		} catch (NumberFormatException | NullPointerException e) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			return;
 		}
 		
-		AlbumDAO albumDAO = new AlbumDAO(this.connection);
-		Album albumToSend = null;
+		CommentDAO commentDAO = new CommentDAO(this.connection);
+		List<Comment> commentsToSend = null;
 		
 		try {
-			albumToSend = albumDAO.getAlbumById(albumId);
+			commentsToSend = commentDAO.getCommentsByImage(imageId);
 		} catch (SQLException e) {
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 			return;
 		}
 		
-		if (albumToSend == null) {
-			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-			return;
-		}
-		
 		Gson gson = new GsonBuilder().create();
-		String json = gson.toJson(albumToSend);
+		String json = gson.toJson(commentsToSend);
 		
 		response.setStatus(HttpServletResponse.SC_OK);
 		response.setContentType("application/json");

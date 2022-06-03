@@ -1,7 +1,7 @@
 (function() { 
 	
 	// page components
-	  let albumList, albumInfo, albumThumbnails, imageWindow, username,
+	  let albumList, albumInfo, albumThumbnails, imageWindow, username, commentsSection
 	    pageOrchestrator = new PageOrchestrator(); // main controller
 	  window.addEventListener("load", () => {
 	    if (sessionStorage.getItem("username") == null) {
@@ -33,6 +33,9 @@
 											document.getElementById("id_close"));
 											
 			imageWindow.registerEvents();
+			
+			commentsSection = new CommentsSection(	document.getElementById("id_comments"), 
+													document.getElementById("id_comments_alert"));
 			
 			document.querySelector("a[href='Logout']").addEventListener('click', () => {
 	        window.sessionStorage.removeItem('username');
@@ -236,9 +239,10 @@
 					
 					this.thumbnailsContainer.appendChild(imagecell);
 					
+					var self = this;
 					
 					imagetag.addEventListener("mouseover", function(e) {
-						imageWindow.show(e.target.getAttribute("src"));
+						imageWindow.show(e.target.getAttribute("src"), self.images[5*page + i].id);
 					}, false)
 				}
 				
@@ -278,7 +282,7 @@
 		this.imageWindowContainer = imageWindowContainer;
 		this.closeButtonContainer = closeButtonContainer;
 		
-		this.show = function(image_src) {
+		this.show = function(image_src, imageID) {
 			
 			var imageTag = document.createElement("img");
 			imageTag.setAttribute("src", image_src);
@@ -288,6 +292,8 @@
 			
 			this.imageWindowContainer.insertBefore(imageTag, this.imageWindowContainer.firstChild);
 			
+			commentsSection.loadComments(imageID);
+			
 		}
 		
 		this.registerEvents = function() {
@@ -296,8 +302,59 @@
 				darken(false);
 				self.imageWindowWithCloseButtonContainer.style.visibility = "hidden";
 				self.imageWindowContainer.removeChild(self.imageWindowContainer.firstChild);
+				commentsSection.reset();
 			}, false);
 		}
+	}
+	
+	function CommentsSection(commentsTable, commentsAlert) {
+		this.commentsTable = commentsTable;
+		this.commentsAlert = commentsAlert;
+		
+		this.loadComments = function(imageID) {
+			var self = this;
+			makeCall("GET", "GetComments?imageId=" + imageID, null, function(request) {
+				if (request.readyState == 4) {
+		            var unparsed_json = request.responseText;
+		            if (request.status == 200) {
+		              var comments = JSON.parse(unparsed_json);
+		              if (comments.length == 0) {
+		                self.commentsAlert.textContent = "No comments for this image yet. Be the first!";
+		                return;
+		              }
+		              self.updateView(comments); // self visible by closure
+		            
+		          	} else {
+		            	self.otherAlbumsAlert.textContent = message;
+		          	}
+	          	}
+			});
+		}
+		
+		this.updateView = function(comments) {
+			var row, usercell, username, textcell, text;
+			var self = this;
+	      	this.commentsTable.innerHTML = ""; // empty the tables body
+	      	comments.forEach(function(comment) {
+		        row = document.createElement("tr");
+		        usercell = document.createElement("td");
+		        row.appendChild(usercell);
+		        username = document.createTextNode(comment.username);
+		        usercell.appendChild(username);
+		        textcell = document.createElement("td");
+		        row.appendChild(textcell)
+		        text = document.createTextNode(comment.text);
+		        textcell.appendChild(text);
+		        
+		        self.commentsTable.appendChild(row);
+		    });
+		}
+		
+		this.reset = function() {
+			this.commentsTable.innerHTML = "";
+			this.commentsAlert.innerHTML = "";
+		}
+		
 	}
 
 }) ();
