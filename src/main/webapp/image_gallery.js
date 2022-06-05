@@ -38,6 +38,10 @@
 													document.getElementById("id_comments_alert"),
 													document.getElementById("id_submit_comment"),
 													document.getElementById("id_submit_comment_alert"));
+
+			document.getElementById("id_submit_comment").addEventListener("submit", (e)=>{
+				e.preventDefault();
+			})
 			
 			document.querySelector("a[href='Logout']").addEventListener('click', () => {
 	        window.sessionStorage.removeItem('username');
