@@ -144,6 +144,29 @@
 
 		this.dragStart = function(event) {
 			startElement = event.target.closest("tr");
+			//Create the button that confirms the order, if not exists
+			if (document.getElementById("orderButton") === null) {
+				let orderButton = document.createElement("button");
+				orderButton.setAttribute("id", "orderButton");
+				orderButton.textContent = "Confirm";
+				orderButton.addEventListener("click", () => {
+					let orderForm = document.createElement("form");
+					let inputTag;
+					let divChildren = myAlbumsContainer.children;
+					for (let i = 0; i < divChildren.length - 1; i++) {
+						inputTag = document.createElement("input");
+						inputTag.setAttribute("name", "albumId");
+						inputTag.value = divChildren[i].getElementsByTagName("a")[0].getAttribute("albumid");
+						orderForm.appendChild(inputTag);
+					}
+
+					makeCall("POST", "OrderAlbums", orderForm, (e) => {
+						let orderButtonToRemove = document.getElementById("orderButton");
+						orderButtonToRemove.parentNode.removeChild(orderButtonToRemove);
+					});
+				});
+				myAlbumsContainer.appendChild(orderButton);
+			}
 		}
 
 		this.dragOver = function(event) {
@@ -233,6 +256,8 @@
 							let image_to_add = new Image();
 							image_to_add.src = image.imgPath.substr(1);
 							image_to_add.id = image.id;
+							image_to_add.title = image.title;
+							image_to_add.desc = image.text;
 							self.images.push(image_to_add);
 						});
 						self.show(0);
@@ -293,7 +318,7 @@
 					var self = this;
 					
 					imagetag.addEventListener("mouseover", function(e) {
-						imageWindow.show(e.target.getAttribute("src"), self.images[5*page + i].id);
+						imageWindow.show(e.target.getAttribute("src"), self.images[5*page + i].id, self.images[5*page + i].title, self.images[5*page + i].desc);
 					}, false)
 				}
 				
@@ -333,7 +358,7 @@
 		this.imageWindowContainer = imageWindowContainer;
 		this.closeButtonContainer = closeButtonContainer;
 		
-		this.show = function(image_src, imageID) {
+		this.show = function(image_src, imageID, imageTitle, imageDesc) {
 			
 			var imageTag = document.createElement("img");
 			imageTag.setAttribute("src", image_src);
@@ -342,6 +367,14 @@
 			darken(true);
 			
 			this.imageWindowContainer.insertBefore(imageTag, this.imageWindowContainer.firstChild);
+
+			var imageTitleTag = document.createElement("h1");
+			imageTitleTag.textContent = imageTitle;
+			this.imageWindowContainer.insertBefore(imageTitleTag, this.imageWindowContainer.firstChild);
+
+			var descriptionTag = document.createElement("p");
+			descriptionTag.textContent = imageDesc;
+			imageTag.insertAdjacentElement("afterend", descriptionTag);
 			
 			commentsSection.loadComments(imageID);
 		}
@@ -352,6 +385,9 @@
 				darken(false);
 				self.imageWindowWithCloseButtonContainer.style.visibility = "hidden";
 				self.imageWindowContainer.removeChild(self.imageWindowContainer.firstChild);
+				self.imageWindowContainer.removeChild(self.imageWindowContainer.firstChild);
+				self.imageWindowContainer.removeChild(self.imageWindowContainer.firstChild);
+
 				commentsSection.reset();
 			}, false);
 		}

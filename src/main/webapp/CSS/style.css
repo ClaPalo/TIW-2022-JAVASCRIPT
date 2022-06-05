@@ -191,12 +191,7 @@ a {
 	color: black;
 }
 
-.selected > a{
+.selected a{
 	color: red;
 }
-
-.notselected > a{
-	color: black;
-}
-
 
