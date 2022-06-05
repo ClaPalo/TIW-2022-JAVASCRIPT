@@ -153,19 +153,21 @@
 					let orderForm = document.createElement("form");
 					let inputTag;
 					let divChildren = myAlbumsContainer.children;
-					for (let i = 0; i < divChildren.length - 1; i++) {
+					for (let i = 0; i < divChildren.length; i++) {
 						inputTag = document.createElement("input");
 						inputTag.setAttribute("name", "albumId");
 						inputTag.value = divChildren[i].getElementsByTagName("a")[0].getAttribute("albumid");
 						orderForm.appendChild(inputTag);
 					}
 
-					makeCall("POST", "OrderAlbums", orderForm, (e) => {
-						let orderButtonToRemove = document.getElementById("orderButton");
-						orderButtonToRemove.parentNode.removeChild(orderButtonToRemove);
+					makeCall("POST", "OrderAlbums", orderForm, (request) => {
+						if  (request.readyState === 1) {
+							let orderButtonToRemove = document.getElementById("orderButton");
+							orderButtonToRemove.parentNode.removeChild(orderButtonToRemove);
+						}
 					});
 				});
-				myAlbumsContainer.appendChild(orderButton);
+				myAlbumsContainer.closest("table").parentNode.insertBefore(orderButton, myAlbumsContainer.closest("table").nextSibling);
 			}
 		}
 
@@ -184,7 +186,7 @@
 			var dest = event.target.closest("tr");
 
 			// Obtain the index of the row in the table to use it as reference
-			// for changing the dragged element possition
+			// for changing the dragged element position
 			var table = dest.closest('table');
 			var rowsArray = Array.from(table.querySelectorAll('tbody > tr'));
 			var indexDest = rowsArray.indexOf(dest);
