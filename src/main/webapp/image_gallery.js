@@ -370,10 +370,6 @@
 		            var unparsed_json = request.responseText;
 		            if (request.status == 200) {
 		              var comments = JSON.parse(unparsed_json);
-		              if (comments.length == 0) {
-		                self.commentsAlert.textContent = "No comments for this image yet. Be the first!";
-		                return;
-		              }
 		              self.updateView(comments, imageID); // self visible by closure
 		            
 		          	} else {
@@ -388,19 +384,24 @@
 			var self = this;
 			this.reset();
 	      	//this.commentsTable.innerHTML = ""; // empty the tables body
-	      	comments.forEach(function(comment) {
-		        row = document.createElement("tr");
-		        usercell = document.createElement("td");
-		        row.appendChild(usercell);
-		        username = document.createTextNode(comment.username);
-		        usercell.appendChild(username);
-		        textcell = document.createElement("td");
-		        row.appendChild(textcell)
-		        text = document.createTextNode(comment.text);
-		        textcell.appendChild(text);
-		        
-		        self.commentsTable.appendChild(row);
-		    });
+	      	if (comments.length > 0) {
+		      	comments.forEach(function(comment) {
+			        row = document.createElement("tr");
+			        usercell = document.createElement("td");
+			        row.appendChild(usercell);
+			        username = document.createTextNode(comment.username);
+			        usercell.appendChild(username);
+			        textcell = document.createElement("td");
+			        row.appendChild(textcell)
+			        text = document.createTextNode(comment.text);
+			        textcell.appendChild(text);
+			        
+			        self.commentsTable.appendChild(row);
+			    });
+		    } else {
+				self.commentsAlert.textContent = "No comments for this image yet. Be the first!";
+
+			}
 
 			  let commentInput = document.createElement("input");
 			  commentInput.setAttribute("name", "text");
