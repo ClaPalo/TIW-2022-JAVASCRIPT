@@ -26,7 +26,8 @@
 			albumInfo = new AlbumInfo(document.getElementById("id_album_title"));
 			
 			albumThumbnails = new AlbumThumbnails(	document.getElementById("id_thumbnails_with_buttons"),
-													document.getElementById("id_thumbnails"));
+													document.getElementById("id_thumbnails"),
+													document.getElementById("id_noalbum_alert"));
 													
 			imageWindow = new ImageWindow(	document.getElementById("id_image_window_with_close"),
 											document.getElementById("id_image_window"),
@@ -241,12 +242,13 @@
 		
 	}
 	
-	function AlbumThumbnails(thumbnailsWithButtonsContainer, thumbnailsContainer) {
+	function AlbumThumbnails(thumbnailsWithButtonsContainer, thumbnailsContainer, alertContainer) {
 		
 		this.images = [];
 		
 		this.thumbnailsWithButtonsContainer = thumbnailsWithButtonsContainer;
 		this.thumbnailsContainer = thumbnailsContainer;
+		this.alertContainer = alertContainer;
 		
 		this.loadImages = function(albumID) {
 			var self = this;
@@ -254,18 +256,23 @@
 				
 				var message = request.responseText;
 				self.images = [];
+				self.alertContainer.innerHTML = "";
 				
 				if (request.readyState == 4) {
 					if (request.status == 200) {
 						let images = JSON.parse(message);
-						images.forEach(function (image) {
-							let image_to_add = new Image();
-							image_to_add.src = image.imgPath.substr(1);
-							image_to_add.id = image.id;
-							image_to_add.title = image.title;
-							image_to_add.desc = image.text;
-							self.images.push(image_to_add);
-						});
+						if (images == null || images.length == 0) {
+							self.alertContainer.appendChild(document.createTextNode("This album has no images yet :("));
+						} else {
+							images.forEach(function (image) {
+								let image_to_add = new Image();
+								image_to_add.src = image.imgPath.substr(1);
+								image_to_add.id = image.id;
+								image_to_add.title = image.title;
+								image_to_add.desc = image.text;
+								self.images.push(image_to_add);
+							});
+						}
 						self.show(0);
 					} else if (request.readyState == 404) {
 						// TODO
@@ -356,6 +363,7 @@
 				this.thumbnailsWithButtonsContainer.removeChild(document.getElementById("id_next_button"));
 			}
 			this.thumbnailsContainer.innerHTML = "";
+			this.alertContainer.innerHTML = "";
 		}
 	}
 	
