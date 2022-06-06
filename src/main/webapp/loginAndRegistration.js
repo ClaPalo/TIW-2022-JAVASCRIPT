@@ -62,17 +62,17 @@
 		})
 
 		createAccountLabel.addEventListener("mouseover", ()=>{
-			createAccountLabel.style.backgroundColor = "grey";
+			createAccountLabel.style["text-decoration"] = "underline";
 		})
 		createAccountLabel.addEventListener("mouseleave", ()=>{
-			createAccountLabel.style.backgroundColor = "";
+			createAccountLabel.style["text-decoration"] = "none";
 		})
 
 		alreadyUserLabel.addEventListener("mouseover", ()=>{
-			alreadyUserLabel.style.backgroundColor = "grey";
+			alreadyUserLabel.style["text-decoration"] = "underline";
 		})
 		alreadyUserLabel.addEventListener("mouseleave", ()=>{
-			alreadyUserLabel.style.backgroundColor = "";
+			alreadyUserLabel.style["text-decoration"] = "none";
 		})
 
 		loginButton.addEventListener("click", (e)=>{

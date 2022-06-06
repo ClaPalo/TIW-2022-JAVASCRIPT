@@ -72,6 +72,10 @@ body {
 	font-size: large;
 }
 
+#id_my_albums td {
+	cursor: move;
+}
+
 .albums th {
 	text-align: center;
 	font-size: x-large;
