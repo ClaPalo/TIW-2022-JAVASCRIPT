@@ -71,15 +71,15 @@ public class CreateUser extends HttpServlet {
 		if (username == null || password == null || mail == null || repPassword == null ||
 				username.isEmpty() || password.isEmpty() || mail.isEmpty() || repPassword.isEmpty()) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			response.getWriter().println("Devi inserire tutti i dati richiesti");
-			System.out.println("Mancano dati");
+			response.getWriter().println("You must enter all the required data");
+			System.out.println("Missing data");
 			return;
 		}
 		
 		
 		if (!isValidMail(mail)) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			response.getWriter().println("Mail non valida");
+			response.getWriter().println("Invalid email");
 			System.out.println("Mail");
 			return;
 		}
@@ -89,29 +89,29 @@ public class CreateUser extends HttpServlet {
 		try {
 			if (userDao.isPresentUsername(username)) {
 				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-				response.getWriter().println("Username gia presente");
-				System.out.println("Username gia presente");
+				response.getWriter().println("Username already exists");
+				System.out.println("Username already exists");
 				return;
 			} else if (userDao.isPresentMail(mail)) {
 				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-				response.getWriter().println("E-mail gia presente");
-				System.out.println("E-mail gia presente");
+				response.getWriter().println("Email already exists");
+				System.out.println("Email already exists");
 				return;
 			} else if (password.length() < 5) {
 				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-				response.getWriter().println("La password deve essere di almeno 5 caratteri");
-				System.out.println("La password deve essere di almeno 5 caratteri");
+				response.getWriter().println("Password must be at least 5 characters long");
+				System.out.println("Password must be at least 5 characters long");
 				return;
 			} else if (!password.equals(repPassword)) {
 				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-				response.getWriter().println("Le password devono coincidere");
-				System.out.println("Le password devono coincidere");
+				response.getWriter().println("Passwords must be the same");
+				System.out.println("Passwords must be the same");
 				return;
 			}
 		} catch (SQLException e) {
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-			response.getWriter().println("Si è verificato un errore nel server, riprova più tardi");
-			System.out.println("Si è verificato un errore nel server, riprova più tardi");
+			response.getWriter().println("A server error occurred, try again later");
+			System.out.println("A server error occurred, try again later");
 			return;
 		}
 		
@@ -119,8 +119,8 @@ public class CreateUser extends HttpServlet {
 			userDao.addUser(username, password, mail);
 		} catch (SQLException e) {
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-			response.getWriter().println("Si è verificato un errore nel server, riprova più tardi");
-			System.out.println("Si è verificato un errore nel server, riprova più tardi");
+			response.getWriter().println("A server error occurred, try again later");
+			System.out.println("A server error occurred, try again later");
 			return;
 
 		}
