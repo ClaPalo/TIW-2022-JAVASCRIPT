@@ -15,7 +15,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import it.polimi.tiw.beans.User;
 import it.polimi.tiw.dao.UserDAO;
 
 /**
