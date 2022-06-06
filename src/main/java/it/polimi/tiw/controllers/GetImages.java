@@ -1,9 +1,6 @@
 package it.polimi.tiw.controllers;
 
-import it.polimi.tiw.beans.User;
-import it.polimi.tiw.beans.Album;
 import it.polimi.tiw.beans.Image;
-import it.polimi.tiw.dao.AlbumDAO;
 import it.polimi.tiw.dao.ImageDAO;
 
 import java.io.IOException;
@@ -14,13 +11,11 @@ import java.sql.SQLException;
 
 import java.util.List;
 
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -40,9 +35,6 @@ public class GetImages extends HttpServlet {
 	}
 	
 	public void doGet(HttpServletRequest request, HttpServletResponse response)  throws ServletException, IOException {
-		
-		ServletContext context = getServletContext();
-		HttpSession session = request.getSession();
 		
 		Integer albumId = null;
 		

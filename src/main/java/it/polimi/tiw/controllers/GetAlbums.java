@@ -12,7 +12,6 @@ import java.sql.SQLException;
 
 import java.util.List;
 
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.annotation.WebServlet;
@@ -39,7 +38,6 @@ public class GetAlbums extends HttpServlet {
 	
 	public void doGet(HttpServletRequest request, HttpServletResponse response)  throws ServletException, IOException {
 		
-		ServletContext context = getServletContext();
 		HttpSession session = request.getSession();
 		
 		User user = (User) session.getAttribute("user");
