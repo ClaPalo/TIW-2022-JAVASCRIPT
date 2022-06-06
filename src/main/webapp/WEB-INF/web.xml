@@ -35,6 +35,10 @@ http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd" version="4.0">
 		<url-pattern>/GetAlbums</url-pattern>
 		<url-pattern>/GetAlbumInfo</url-pattern>
 		<url-pattern>/GetAlbumImages</url-pattern>
+		<url-pattern>/GetComments</url-pattern>
+		<url-pattern>/SubmitComment</url-pattern>
+		<url-pattern>/OrderAlbums</url-pattern>
+		<url-pattern>/GetImages</url-pattern>
 	</filter-mapping>
 	<welcome-file-list>
    		<welcome-file>index.html</welcome-file>
