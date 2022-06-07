@@ -1,7 +1,7 @@
 (function() { 
 	
 	// page components
-	  let albumList, albumInfo, albumThumbnails, imageWindow, username, commentsSection
+	  let albumList, albumInfo, albumThumbnails, imageWindow, username, commentsSection, editAlbum
 	    pageOrchestrator = new PageOrchestrator(); // main controller
 	  window.addEventListener("load", () => {
 	    if (sessionStorage.getItem("username") == null) {
@@ -40,17 +40,26 @@
 													document.getElementById("id_submit_comment"),
 													document.getElementById("id_submit_comment_alert"));
 
+			editAlbum = new EditAlbum(document.getElementById("id_container_edit_album"));
+
+			document.getElementById("id_button_new_album").addEventListener("click", ()=>{
+				pageOrchestrator.refresh();
+				editAlbum.loadImages(null, null);
+			});
+
 			document.getElementById("id_submit_comment").addEventListener("submit", (e)=>{
 				e.preventDefault();
-			})
+			});
 			
 			document.querySelector("a[href='Logout']").addEventListener('click', () => {
 	        window.sessionStorage.removeItem('username');
-	      })
+	      });
 		}
 		
 		this.refresh = function() {
 			albumThumbnails.reset();
+			editAlbum.reset();
+			document.getElementById("id_album_title").innerHTML = "";
 			albumList.showMyAlbums();
 			albumList.showOtherAlbums();
 		}
@@ -135,6 +144,7 @@
 	        anchor.setAttribute("albumid", album.id);
 	        anchor.addEventListener("click", (e) => {
 	          // dependency via module parameter
+				pageOrchestrator.refresh();
 	          let albumID = e.target.getAttribute("albumid");
 	          albumInfo.show(albumID);
 	          albumThumbnails.loadImages(albumID);
@@ -504,6 +514,88 @@
 			this.commentsForm.innerHTML = "";
 		}
 		
+	}
+
+	function EditAlbum(formContainer) {
+		this.formContainer = formContainer;
+
+		this.loadImages = function(albumId, albumName) {
+			let self = this;
+			let queryString =(albumId !== null) ? ("?albumId = " + albumId) : "";
+			let path = "EditAlbum" + queryString;
+			makeCall("GET", path, null, (request)=>{
+				let message = request.responseText;
+				console.log(message);
+				let images;
+
+				if (request.readyState === 4) {
+					if (request.status === 200) {
+						images = JSON.parse(message);
+						self.show(albumId, albumName, images);
+					}
+				}
+			});
+		}
+
+		this.show = function(albumId, albumName, images) {
+			this.formContainer.style.visibility = "visible";
+			if (albumId !== null) {
+				this.formContainer.getElementById("id_album_name").value = albumName;
+				let albumTag = document.createElement("input");
+				albumTag.setAttribute("name", "albumId");
+				albumTag.setAttribute("value", albumId);
+				albumTag.setAttribute("type", "text");
+				albumTag.style.display = "none";
+				this.formContainer.appendChild(albumTag);
+			}
+
+			for (let i = 0; i < images.length; i++) {
+				let inputTag = document.createElement("input");
+				let imgTag = document.createElement("img");
+
+				inputTag.setAttribute("type", "checkbox");
+				inputTag.setAttribute("name", "imageId");
+				inputTag.setAttribute("value", images[i].id);
+
+				imgTag.setAttribute("src", images[i].imgPath.substr(1));
+				imgTag.setAttribute("width", "120");
+
+				this.formContainer.firstChild.appendChild(inputTag);
+				this.formContainer.firstChild.appendChild(imgTag);
+				imgTag.appendChild(document.createElement("br"));
+			}
+
+			let buttonTag = document.createElement("button");
+			buttonTag.textContent = "Confirm";
+			buttonTag.addEventListener("click", ()=>{
+				makeCall("POST", "EditAlbum", this.formContainer.firstChild, null);
+
+				pageOrchestrator.refresh();
+			})
+			this.formContainer.appendChild(buttonTag);
+		}
+
+		this.reset = function() {
+			this.formContainer.style.visibility = "hidden"
+			this.formContainer.innerHTML = "";
+
+			let formTag = document.createElement("form");
+			formTag.setAttribute("id", "id_form_edit_album");
+
+			let inputTag = document.createElement("input");
+			inputTag.setAttribute("type", "text");
+			inputTag.setAttribute("name", "albumName");
+			inputTag.setAttribute("placeholder", "Album name");
+			inputTag.setAttribute("id", "id_album_name");
+			inputTag.setAttribute("maxlength", "45");
+			inputTag.addEventListener("submit", (e)=>{
+				e.preventDefault();
+			});
+
+			this.formContainer.appendChild(formTag);
+			formTag.appendChild(inputTag);
+			formTag.appendChild(document.createElement("br"));
+		}
 	}
 
 }) ();

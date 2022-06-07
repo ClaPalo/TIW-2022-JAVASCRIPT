@@ -199,3 +199,15 @@ a {
 	color: red;
 }
 
+.editalbum {
+	visibility: hidden;
+	position:absolute;
+	box-sizing: border-box;
+	width: 85%;
+	top:0;
+	bottom:0;
+	border-bottom: solid;
+	border-width: thin;
+	margin-left: 15%;
+}
+
