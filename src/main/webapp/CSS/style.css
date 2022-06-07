@@ -86,6 +86,20 @@ body {
 	margin-bottom: 20px;
 }
 
+#id_button_new_album {
+  background-color: white;
+  border: solid;
+  border-width: thin;
+  padding: 5px 12px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
 .albuminfo {
 	position:absolute;
 	box-sizing: border-box;
@@ -210,4 +224,3 @@ a {
 	border-width: thin;
 	margin-left: 15%;
 }
-
