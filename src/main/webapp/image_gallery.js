@@ -264,7 +264,7 @@
 				pageOrchestrator.refresh();
 				editAlbum.loadImages(album.id, album.title);
 			});
-			this.infoContainer.insertBefore(buttonTag, this.infoContainer.firstChild.nextSibling);
+			this.infoContainer.appendChild(buttonTag);
 		}
 
 		this.reset = function() {
@@ -592,10 +592,14 @@
 			let buttonTag = document.createElement("button");
 			buttonTag.textContent = "Confirm";
 			buttonTag.addEventListener("click", ()=>{
-				makeCall("POST", "EditAlbum", this.formContainer.firstChild, ()=>{
+				makeCall("POST", "EditAlbum", this.formContainer.firstChild, (request)=>{
+					if (request.readyState === 4) {
+						if (request.status === 200) {
+							pageOrchestrator.refresh();
+						}
+					}
 					//TODO Gestisci errori
 				});
-				pageOrchestrator.refresh();
 				albumInfo.show(albumId);
 				albumThumbnails.loadImages(albumId);
 			})
