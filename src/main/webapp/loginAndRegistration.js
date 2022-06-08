@@ -32,8 +32,9 @@
 		start();
 
 		createAccountLabel.style.color = "blue";
+		createAccountLabel.style.cursor = "pointer";
 		alreadyUserLabel.style.color = "blue";
-
+		alreadyUserLabel.style.cursor = "pointer";
 		
 
 		//Aggiungo i listener
