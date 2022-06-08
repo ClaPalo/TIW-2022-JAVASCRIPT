@@ -562,6 +562,7 @@
 
 		this.show = function(albumId, albumName, images) {
 			this.formContainer.style.visibility = "visible";
+			self = this;
 			if (albumId !== null) {
 				this.formContainer.firstChild.firstChild.value = albumName;
 				let albumTag = document.createElement("input");
@@ -595,6 +596,8 @@
 					//TODO Gestisci errori
 				});
 				pageOrchestrator.refresh();
+				albumInfo.show(albumId);
+				albumThumbnails.loadImages(albumId);
 			})
 			this.formContainer.appendChild(buttonTag);
 		}
