@@ -23,7 +23,7 @@
 										document.getElementById("id_my_albums"),
 										document.getElementById("id_other_albums"))
 			
-			albumInfo = new AlbumInfo(document.getElementById("id_album_title"));
+			albumInfo = new AlbumInfo(document.getElementById("id_album_title"), document.getElementById("id_album_info"));
 			
 			albumThumbnails = new AlbumThumbnails(	document.getElementById("id_thumbnails_with_buttons"),
 													document.getElementById("id_thumbnails"),
@@ -59,7 +59,7 @@
 		this.refresh = function() {
 			albumThumbnails.reset();
 			editAlbum.reset();
-			document.getElementById("id_album_title").innerHTML = "";
+			albumInfo.reset();
 			albumList.showMyAlbums();
 			albumList.showOtherAlbums();
 		}
@@ -223,12 +223,14 @@
 		
 	}
 	
-	function AlbumInfo(titleContainer) {
+	function AlbumInfo(titleContainer, infoContainer) {
 		
 		this.titleContainer = titleContainer;
+		this.infoContainer = infoContainer;
 		
 		this.show = function(albumID) {
 			var self = this;
+
 			makeCall("GET", "GetAlbumInfo?id=" + albumID, null, function(request) {
 				
 				var message = request.responseText;
@@ -237,6 +239,7 @@
 					if (request.status == 200) {
 						var album = JSON.parse(message);
 						self.update(album);
+						self.updateButton(album);
 					} else if (request.readyState == 404) {
 						// TODO
 					} else {
@@ -248,6 +251,26 @@
 		
 		this.update = function(album) {
 			this.titleContainer.textContent = album.title;
+		}
+
+		this.updateButton = function(album) {
+			let oldButton = document.getElementById("id_edit_album_button");
+			if (oldButton !== null) oldButton.remove();
+
+			let buttonTag = document.createElement("button");
+			buttonTag.textContent = "Edit album";
+			buttonTag.setAttribute("id", "id_edit_album_button");
+			buttonTag.addEventListener("click", ()=>{
+				pageOrchestrator.refresh();
+				editAlbum.loadImages(album.id, album.title);
+			});
+			this.infoContainer.insertBefore(buttonTag, this.infoContainer.firstChild.nextSibling);
+		}
+
+		this.reset = function() {
+			let editButton = document.getElementById("id_edit_album_button");
+			if (editButton !== null) editButton.remove();
+			this.titleContainer.innerHTML = "";
 		}
 		
 	}
@@ -521,7 +544,7 @@
 
 		this.loadImages = function(albumId, albumName) {
 			let self = this;
-			let queryString =(albumId !== null) ? ("?albumId = " + albumId) : "";
+			let queryString =(albumId !== null) ? ("?albumId=" + albumId) : "";
 			let path = "EditAlbum" + queryString;
 			makeCall("GET", path, null, (request)=>{
 				let message = request.responseText;
@@ -540,13 +563,13 @@
 		this.show = function(albumId, albumName, images) {
 			this.formContainer.style.visibility = "visible";
 			if (albumId !== null) {
-				this.formContainer.getElementById("id_album_name").value = albumName;
+				this.formContainer.firstChild.firstChild.value = albumName;
 				let albumTag = document.createElement("input");
 				albumTag.setAttribute("name", "albumId");
 				albumTag.setAttribute("value", albumId);
 				albumTag.setAttribute("type", "text");
 				albumTag.style.display = "none";
-				this.formContainer.appendChild(albumTag);
+				this.formContainer.firstChild.appendChild(albumTag);
 			}
 
 			for (let i = 0; i < images.length; i++) {
@@ -568,8 +591,9 @@
 			let buttonTag = document.createElement("button");
 			buttonTag.textContent = "Confirm";
 			buttonTag.addEventListener("click", ()=>{
-				makeCall("POST", "EditAlbum", this.formContainer.firstChild, null);
-
+				makeCall("POST", "EditAlbum", this.formContainer.firstChild, ()=>{
+					//TODO Gestisci errori
+				});
 				pageOrchestrator.refresh();
 			})
 			this.formContainer.appendChild(buttonTag);

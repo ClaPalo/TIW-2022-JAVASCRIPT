@@ -131,6 +131,7 @@ public class EditAlbum extends HttpServlet {
 		String albumName = request.getParameter("albumName");
 		if (albumName == null || albumName.isEmpty()) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			System.out.println("No album name");
 			return;
 		}
 		
@@ -157,6 +158,7 @@ public class EditAlbum extends HttpServlet {
 				albumDAO.changeAlbumName(albumId, albumName);
 			} catch (NumberFormatException | NullPointerException e) {
 				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);// "Missing album ID");
+				System.out.println("No album ID");
 				return;
 			} catch (SQLException e) {
 				response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
@@ -170,8 +172,8 @@ public class EditAlbum extends HttpServlet {
 		ImageDAO imageDAO = new ImageDAO(this.connection);
 		
 		if (imageIDs == null) {
-			System.out.println("Nessun ID");
-			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);// "No images were selected.");
+			System.out.println("Nessuna immagine da aggiungere");
+			response.setStatus(HttpServletResponse.SC_OK);// "No images were selected.");
 			return;
 		}
 		
@@ -203,6 +205,8 @@ public class EditAlbum extends HttpServlet {
 			}
 			
 		}
+		
+		response.setStatus(HttpServletResponse.SC_OK);
 	}
 
 }
