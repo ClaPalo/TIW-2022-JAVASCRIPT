@@ -164,6 +164,7 @@
 				let orderButton = document.createElement("button");
 				orderButton.setAttribute("id", "orderButton");
 				orderButton.textContent = "Confirm";
+				orderButton.setAttribute("class", "confirm_button");
 				orderButton.addEventListener("click", () => {
 					let orderForm = document.createElement("form");
 					let inputTag;
@@ -582,15 +583,17 @@
 				inputTag.setAttribute("value", images[i].id);
 
 				imgTag.setAttribute("src", images[i].imgPath.substr(1));
-				imgTag.setAttribute("width", "120");
+				imgTag.setAttribute("width", "240");
 
 				this.formContainer.firstChild.appendChild(inputTag);
 				this.formContainer.firstChild.appendChild(imgTag);
+				this.formContainer.firstChild.appendChild(document.createElement("br"));
 				this.formContainer.firstChild.appendChild(document.createElement("br"));
 			}
 
 			let buttonTag = document.createElement("button");
 			buttonTag.textContent = "Confirm";
+			buttonTag.setAttribute("class", "confirm_button");
 			buttonTag.addEventListener("click", ()=>{
 				makeCall("POST", "EditAlbum", this.formContainer.firstChild, (request)=>{
 					if (request.readyState === 4) {

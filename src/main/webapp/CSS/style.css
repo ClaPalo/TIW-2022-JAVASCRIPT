@@ -132,14 +132,26 @@ body {
   border-radius: 8px;
 }
 
+.confirm_button {
+	background-color: white;
+  	border: solid;
+	border-width: thin;
+	padding: 5px 12px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 16px;
+	margin: 4px 2px;
+	cursor: pointer;
+	border-radius: 8px;
+}
+
 .thumbnails {
 	display: table;
 	position: relative;
-	width: 80%;
+	width: 100%;
 	top: 50%;
 	transform: translateY(-90%);
-	margin-left: auto;
-	margin-right: auto;
 	height: 180px;
 	text-align: center;
 }
@@ -147,6 +159,45 @@ body {
 .thumbnails label {
 	display: table-cell;
 	vertical-align: middle;
+	width: 80px;
+}
+
+.prev_button {
+	text-align: left;
+	padding-left: 30px;
+}
+
+.prev_button button {
+	background-color: white;
+  	border: solid;
+	border-width: thin;
+	padding: 5px 12px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 16px;
+	margin: 4px 2px;
+	cursor: pointer;
+	border-radius: 8px;
+}
+
+.next_button {
+	text-align: right;
+	padding-right: 30px;
+}
+
+.next_button button {
+	background-color: white;
+  	border: solid;
+	border-width: thin;
+	padding: 5px 12px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 16px;
+	margin: 4px 2px;
+	cursor: pointer;
+	border-radius: 8px;
 }
 
 .thumbnails table {
@@ -239,4 +290,22 @@ a {
 	border-width: thin;
 	margin-left: 15%;
 	overflow: scroll;
+	padding: 50px;
+}
+
+.editalbum input[type="text"] {
+	margin-bottom: 30px;
+	border: none;
+	border-bottom: 1px solid;
+	font-size: 50px;
+	width:100%;
+}
+
+.editalbum input[type="text"]:focus {
+	outline: none;
+}
+
+.editalbum input[type="checkbox"] {
+	transform: translateY(-70px);
+	margin-right: 20px;
 }
