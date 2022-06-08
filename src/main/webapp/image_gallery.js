@@ -585,7 +585,7 @@
 
 				this.formContainer.firstChild.appendChild(inputTag);
 				this.formContainer.firstChild.appendChild(imgTag);
-				imgTag.appendChild(document.createElement("br"));
+				this.formContainer.firstChild.appendChild(document.createElement("br"));
 			}
 
 			let buttonTag = document.createElement("button");
