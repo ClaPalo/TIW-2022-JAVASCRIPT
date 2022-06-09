@@ -146,7 +146,10 @@
 	          // dependency via module parameter
 				pageOrchestrator.refresh();
 	          let albumID = e.target.getAttribute("albumid");
-	          albumInfo.show(albumID);
+			  if (areMyAlbums)
+	          	albumInfo.show(albumID, true);
+			  else
+				  albumInfo.show(albumID, false);
 	          albumThumbnails.loadImages(albumID);
 	        }, false);
 	        anchor.href = "#";
@@ -229,7 +232,7 @@
 		this.titleContainer = titleContainer;
 		this.infoContainer = infoContainer;
 		
-		this.show = function(albumID) {
+		this.show = function(albumID, isMyAlbum) {
 			var self = this;
 
 			makeCall("GET", "GetAlbumInfo?id=" + albumID, null, function(request) {
@@ -240,7 +243,8 @@
 					if (request.status == 200) {
 						var album = JSON.parse(message);
 						self.update(album);
-						self.updateButton(album);
+						if (isMyAlbum)
+							self.updateButton(album);
 					} else if (request.readyState == 404) {
 						// TODO
 					} else {
