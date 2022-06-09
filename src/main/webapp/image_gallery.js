@@ -603,12 +603,13 @@
 					if (request.readyState === 4) {
 						if (request.status === 200) {
 							pageOrchestrator.refresh();
+							albumInfo.show(albumId, true);
+							albumThumbnails.loadImages(albumId);
 						}
 					}
 					//TODO Gestisci errori
 				});
-				albumInfo.show(albumId);
-				albumThumbnails.loadImages(albumId);
+
 			})
 			this.formContainer.appendChild(buttonTag);
 		}
