@@ -605,18 +605,20 @@
 			buttonTag.textContent = "Confirm";
 			buttonTag.setAttribute("class", "confirm_button");
 			buttonTag.addEventListener("click", ()=>{
-				makeCall("POST", "EditAlbum", this.formContainer.firstChild, (request)=>{
-					if (request.readyState === 4) {
-						if (request.status === 200) {
-							pageOrchestrator.refresh();
-							albumInfo.show(albumId, true);
-							albumThumbnails.loadImages(albumId);
+				if (this.isValid(this.formContainer.firstChild)) {
+					makeCall("POST", "EditAlbum", this.formContainer.firstChild, (request)=>{
+						if (request.readyState === 4) {
+							if (request.status === 200) {
+								pageOrchestrator.refresh();
+								albumInfo.show(albumId, true);
+								albumThumbnails.loadImages(albumId);
+							}
 						}
-					}
-					//TODO Gestisci errori
-				});
+						//TODO Gestisci errori
+					});
+				}
 
-			})
+			});
 			this.formContainer.appendChild(buttonTag);
 		}
 
@@ -640,6 +642,30 @@
 			this.formContainer.appendChild(formTag);
 			formTag.appendChild(inputTag);
 			formTag.appendChild(document.createElement("br"));
+		}
+
+		this.isValid = function(form) {
+			let errorMessage = null;
+			if (form.firstChild.value.length === 0) {
+				errorMessage = "Album name must have at least 1 character";
+			} else if (form.firstChild.value.length > 45) {
+				errorMessage = "Album name must not have more than 45 characters";
+			}
+
+			if (errorMessage !== null) {
+				let errorTag = document.createElement("p");
+				errorTag.textContent = errorMessage;
+				errorTag.setAttribute("class", "error");
+				errorTag.style.color = "red";
+				//Delete any existing error message
+				let errorMessages = form.getElementsByClassName("error");
+				for (let i = 0; i < errorMessages.length; i++) {
+					errorMessages[0].remove();
+				}
+				form.insertBefore(errorTag, form.firstChild.nextSibling);
+				return false;
+			}
+			return true;
 		}
 	}
 
