@@ -267,7 +267,7 @@
 			if (oldButton !== null) oldButton.remove();
 
 			let buttonTag = document.createElement("button");
-			buttonTag.textContent = "Edit album";
+			buttonTag.textContent = "Add images";
 			buttonTag.setAttribute("id", "id_edit_album_button");
 			buttonTag.addEventListener("click", ()=>{
 				pageOrchestrator.refresh();
