@@ -82,4 +82,17 @@ public class UserDAO {
 			statement.executeUpdate();
 		}
 	}
+	
+	public String getUsernameFromId(int userId) throws SQLException {
+		String query = "SELECT username FROM User WHERE idUser = ?";
+		
+		PreparedStatement statement = connection.prepareStatement(query);
+		statement.setInt(1,  userId);
+		
+		ResultSet result = statement.executeQuery();
+		if (result.next()) {
+			return result.getString("username");
+		}
+		return null;
+	}
 }

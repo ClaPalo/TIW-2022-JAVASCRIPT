@@ -241,10 +241,10 @@
 				
 				if (request.readyState == 4) {
 					if (request.status == 200) {
-						var album = JSON.parse(message);
-						self.update(album);
+						var response = JSON.parse(message);
+						self.update(response[0], response[1]);
 						if (isMyAlbum)
-							self.updateButton(album);
+							self.updateButton(response[0]);
 					} else if (request.readyState == 404) {
 						// TODO
 					} else {
@@ -254,8 +254,12 @@
 			})
 		}
 		
-		this.update = function(album) {
+		this.update = function(album, owner) {
 			this.titleContainer.textContent = album.title;
+			let ownerTag = document.createElement("h3");
+			ownerTag.textContent = "by " + owner;
+			ownerTag.setAttribute("id", "id_owner_tag");
+			this.titleContainer.parentNode.insertBefore(ownerTag, this.titleContainer.nextSibling);
 		}
 
 		this.updateButton = function(album) {
@@ -275,6 +279,8 @@
 		this.reset = function() {
 			let editButton = document.getElementById("id_edit_album_button");
 			if (editButton !== null) editButton.remove();
+			let ownerTag = document.getElementById("id_owner_tag");
+			if (ownerTag !== null) ownerTag.remove();
 			this.titleContainer.innerHTML = "";
 		}
 		

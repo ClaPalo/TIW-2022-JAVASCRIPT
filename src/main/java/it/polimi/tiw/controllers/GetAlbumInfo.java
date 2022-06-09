@@ -2,12 +2,15 @@ package it.polimi.tiw.controllers;
 
 import it.polimi.tiw.beans.Album;
 import it.polimi.tiw.dao.AlbumDAO;
+import it.polimi.tiw.dao.UserDAO;
 
 import java.io.IOException;
 
 import java.sql.Connection;
 import it.polimi.tiw.utils.ConnectionHandler;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -45,9 +48,12 @@ public class GetAlbumInfo extends HttpServlet {
 		
 		AlbumDAO albumDAO = new AlbumDAO(this.connection);
 		Album albumToSend = null;
+		UserDAO userDAO = new UserDAO(this.connection);
+		String ownerName = null;
 		
 		try {
 			albumToSend = albumDAO.getAlbumById(albumId);
+			ownerName = userDAO.getUsernameFromId(albumToSend.getUserId());
 		} catch (SQLException e) {
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 			return;
@@ -58,8 +64,11 @@ public class GetAlbumInfo extends HttpServlet {
 			return;
 		}
 		
+		List<Object> result = new ArrayList<>();
+		result.add(albumToSend);
+		result.add(ownerName);
 		Gson gson = new GsonBuilder().create();
-		String json = gson.toJson(albumToSend);
+		String json = gson.toJson(result);
 		
 		response.setStatus(HttpServletResponse.SC_OK);
 		response.setContentType("application/json");
