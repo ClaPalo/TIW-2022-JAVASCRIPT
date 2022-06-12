@@ -59,9 +59,7 @@ public class EditAlbum extends HttpServlet {
 		ImageDAO imageDAO = new ImageDAO(this.connection);
 
 		AlbumDAO albumDAO = new AlbumDAO(this.connection);
-		
-		System.out.println("Hey I'm here!");
-		
+				
 		albumIdNotParsed = request.getParameter("albumId");
 		
 		if (albumIdNotParsed == null || albumIdNotParsed.isEmpty()) {
@@ -70,7 +68,7 @@ public class EditAlbum extends HttpServlet {
 				images = imageDAO.getImagesOfUser(user.getId());
 			} catch (SQLException e) {
 				response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-				System.out.println("Oh no");
+				response.getWriter().println("Internal server error, try later.");
 				return;
 			}
 		} else {
@@ -80,13 +78,16 @@ public class EditAlbum extends HttpServlet {
 				//Controllo che l'utente sia il proprietario dell'album
 				if (albumDAO.getIdOwnerOfAlbum(albumId) != user.getId()) {
 					response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // "You can't edit someone else's album.");
+					response.getWriter().println("You are not allowed to edit someone else's album");
 					return;
 				}
 			} catch (NumberFormatException | NullPointerException e) {
 				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);// "Missing album parameters.");
+				response.getWriter().println("Missing album parameters.");
 				return;
 			} catch (SQLException e) {
 				response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+				response.getWriter().println("Internal server error, try later.");
 				return;
 			}
 			
@@ -95,12 +96,9 @@ public class EditAlbum extends HttpServlet {
 
 			} catch (SQLException e) {
 				response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+				response.getWriter().println("Internal server error, try later.");
 				return;
 			}
-		}
-		
-		for (Image image : images) {
-			System.out.println(image.getId());
 		}
 		
 		Gson gson = new GsonBuilder().create();
@@ -131,7 +129,7 @@ public class EditAlbum extends HttpServlet {
 		String albumName = request.getParameter("albumName");
 		if (albumName == null || albumName.isEmpty()) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			System.out.println("No album name");
+			response.getWriter().println("Missing album name");
 			return;
 		}
 		
@@ -144,6 +142,7 @@ public class EditAlbum extends HttpServlet {
 				albumId = albumDAO.createEmptyAlbum(albumName, user.getId());
 			} catch (SQLException e) {
 				response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+				response.getWriter().println("Internal server error, try later");
 				return;
 			}
 		} else {
@@ -153,15 +152,17 @@ public class EditAlbum extends HttpServlet {
 				//Controllo che l'album appartenga all'utente
 				if (albumDAO.getIdOwnerOfAlbum(albumId) != user.getId()) {
 					response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);// "You can't edit someone else's album.");
+					response.getWriter().println("You are not allowed to edit someone else's album.");
 					return;
 				}
 				albumDAO.changeAlbumName(albumId, albumName);
 			} catch (NumberFormatException | NullPointerException e) {
 				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);// "Missing album ID");
-				System.out.println("No album ID");
+				response.getWriter().println("Missing album ID.");
 				return;
 			} catch (SQLException e) {
 				response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+				response.getWriter().println("Internal server error, try later.");
 				return;
 			}
 		}
@@ -172,7 +173,6 @@ public class EditAlbum extends HttpServlet {
 		ImageDAO imageDAO = new ImageDAO(this.connection);
 		
 		if (imageIDs == null) {
-			System.out.println("Nessuna immagine da aggiungere");
 			response.setStatus(HttpServletResponse.SC_OK);// "No images were selected.");
 			return;
 		}
@@ -182,6 +182,7 @@ public class EditAlbum extends HttpServlet {
 			imagesAllowed = imageDAO.getImagesIDByUserNotInAlbum(user.getId(), albumId);
 		} catch (SQLException e) {
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			response.getWriter().println("Internal server error, try later.");
 			return;
 		}
 		
@@ -198,15 +199,18 @@ public class EditAlbum extends HttpServlet {
 					imageDAO.addImageToAlbumById(albumId, imageId);
 			} catch (NumberFormatException | NullPointerException e) {
 				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);// "Sorry, something went wrong");
+				response.getWriter().println("Sorry, something went wrong.");
 				return;
 			} catch (SQLException s) {
 				response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+				response.getWriter().println("Internal server error, try later.");
 				return;
 			}
 			
 		}
 		
 		response.setStatus(HttpServletResponse.SC_OK);
+		
 	}
 
 }

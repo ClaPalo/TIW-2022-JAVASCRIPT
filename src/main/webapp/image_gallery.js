@@ -150,7 +150,7 @@
 	          	albumInfo.show(albumID, true);
 			  else
 				  albumInfo.show(albumID, false);
-	          albumThumbnails.loadImages(albumID);
+	          //albumThumbnails.loadImages(albumID);
 	        }, false);
 	        anchor.href = "#";
 	        row.appendChild(titlecell);
@@ -245,6 +245,7 @@
 						self.update(response[0], response[1]);
 						if (isMyAlbum)
 							self.updateButton(response[0]);
+						albumThumbnails.loadImages(albumID);
 					} else {
 						let errorMsg = document.createElement("p");
 						errorMsg.style.color = "red";
@@ -309,7 +310,7 @@
 					if (request.status == 200) {
 						let images = JSON.parse(message);
 						if (images == null || images.length == 0) {
-							self.alertContainer.appendChild(document.createTextNode("This album has no images yet :("));
+							self.alertContainer.appendChild(document.createTextNode("This album has no images or doesn't exists :("));
 						} else {
 							images.forEach(function (image) {
 								let image_to_add = new Image();
@@ -321,10 +322,12 @@
 							});
 						}
 						self.show(0);
-					} else if (request.readyState == 404) {
-						// TODO
 					} else {
-						//TODO
+						let errorMsg = document.createElement("p");
+						errorMsg.style.color = "red";
+						errorMsg.textContent = message;
+						errorMsg.setAttribute("class", "error");
+						self.thumbnailsWithButtonsContainer.appendChild(errorMsg);
 					}
 				}
 			})
@@ -402,6 +405,7 @@
 		}
 		
 		this.reset = function() {
+			clearErrors(thumbnailsWithButtonsContainer);
 			this.images = [];
 			if (document.getElementById("id_prev_button") !== null) {
 				this.thumbnailsWithButtonsContainer.removeChild(document.getElementById("id_prev_button"));
@@ -610,15 +614,21 @@
 			buttonTag.addEventListener("click", ()=>{
 				if (this.isValid(this.formContainer.firstChild)) {
 					makeCall("POST", "EditAlbum", this.formContainer.firstChild, (request)=>{
+						let message = request.responseText;
 						if (request.readyState === 4) {
 							if (request.status === 200) {
 								pageOrchestrator.refresh();
 								albumInfo.show(albumId, true);
-								albumThumbnails.loadImages(albumId);
+								//albumThumbnails.loadImages(albumId);
+							} else {
+								let errorMsg = document.createElement("p");
+								errorMsg.style.color = "red";
+								errorMsg.textContent = message;
+								errorMsg.setAttribute("class", "error");
+								self.formContainer.appendChild(errorMsg);
 							}
 						}
-						//TODO Gestisci errori
-					});
+					}, false);
 				}
 
 			});
@@ -626,6 +636,7 @@
 		}
 
 		this.reset = function() {
+			clearErrors(formContainer);
 			this.formContainer.style.visibility = "hidden"
 			this.formContainer.innerHTML = "";
 

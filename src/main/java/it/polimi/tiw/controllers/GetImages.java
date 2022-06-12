@@ -42,6 +42,7 @@ public class GetImages extends HttpServlet {
 			albumId = Integer.parseInt(request.getParameter("id"));
 		} catch (NumberFormatException | NullPointerException e) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			response.getWriter().println("album ID not valid.");
 			return;
 		}
 		
@@ -52,6 +53,7 @@ public class GetImages extends HttpServlet {
 			imagesToSend = imageDAO.getImagesByAlbum(albumId);
 		} catch (SQLException e) {
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			response.getWriter().println("Internal server error, try later.");
 			return;
 		}
 		
