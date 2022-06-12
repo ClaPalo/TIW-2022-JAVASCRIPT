@@ -28,6 +28,7 @@ http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd" version="4.0">
 	<filter-mapping>
 		<filter-name>NoCacher</filter-name>
 		<url-pattern>/Home.html</url-pattern>
+		<url-pattern>/image_gallery.js</url-pattern>
 	</filter-mapping>
 	<filter-mapping>
 		<filter-name>LoginChecker</filter-name>

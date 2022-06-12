@@ -256,8 +256,8 @@
 		
 		this.update = function(album, owner) {
 			this.titleContainer.textContent = album.title;
-			let ownerTag = document.createElement("h3");
-			ownerTag.textContent = "by " + owner;
+			let ownerTag = document.createElement("p");
+			ownerTag.textContent = "Created by " + owner + " on " + album.dateOfCreation;
 			ownerTag.setAttribute("id", "id_owner_tag");
 			this.titleContainer.parentNode.insertBefore(ownerTag, this.titleContainer.nextSibling);
 		}
