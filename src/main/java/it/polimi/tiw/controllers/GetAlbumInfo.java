@@ -43,6 +43,7 @@ public class GetAlbumInfo extends HttpServlet {
 			albumId = Integer.parseInt(request.getParameter("id"));
 		} catch (NumberFormatException | NullPointerException e) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			response.getWriter().println("The selected album is not valid.");
 			return;
 		}
 		
@@ -54,13 +55,15 @@ public class GetAlbumInfo extends HttpServlet {
 		try {
 			albumToSend = albumDAO.getAlbumById(albumId);
 			ownerName = userDAO.getUsernameFromId(albumToSend.getUserId());
-		} catch (SQLException e) {
+		} catch (NullPointerException | SQLException e) {
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			response.getWriter().println("Internal server error, try later.");
 			return;
 		}
 		
 		if (albumToSend == null) {
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			response.getWriter().println("Album not found.");
 			return;
 		}
 		

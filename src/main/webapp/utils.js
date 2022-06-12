@@ -31,3 +31,10 @@ function darken(should_be_dark) {
 		darkRectangle.style.visibility = "hidden";
 	}
 }
+
+function clearErrors(container) {
+	let errors = container.getElementsByClassName("error");
+	for (let i = 0; i < errors.length; i++) {
+		errors[0].remove();
+	}
+}

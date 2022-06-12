@@ -245,10 +245,12 @@
 						self.update(response[0], response[1]);
 						if (isMyAlbum)
 							self.updateButton(response[0]);
-					} else if (request.readyState == 404) {
-						// TODO
 					} else {
-						//TODO
+						let errorMsg = document.createElement("p");
+						errorMsg.style.color = "red";
+						errorMsg.textContent = message;
+						errorMsg.setAttribute("class", "error");
+						self.titleContainer.parentNode.insertBefore(errorMsg, self.titleContainer.nextSibling);
 					}
 				}
 			})
@@ -277,6 +279,7 @@
 		}
 
 		this.reset = function() {
+			clearErrors(infoContainer);
 			let editButton = document.getElementById("id_edit_album_button");
 			if (editButton !== null) editButton.remove();
 			let ownerTag = document.getElementById("id_owner_tag");
