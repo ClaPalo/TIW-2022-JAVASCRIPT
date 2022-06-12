@@ -584,6 +584,13 @@
 					if (request.status === 200) {
 						images = JSON.parse(message);
 						self.show(albumId, albumName, images);
+					} else {
+						self.formContainer.style.visibility = "visible";
+						let errorMsg = document.createElement("p");
+						errorMsg.setAttribute("class", "error");
+						errorMsg.style.color = "red";
+						errorMsg.textContent = message;
+						self.formContainer.appendChild(errorMsg);
 					}
 				}
 			});
