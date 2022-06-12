@@ -71,14 +71,17 @@ public class OrderAlbums extends HttpServlet {
 				album = albumDAO.getAlbumById(albumId);
 				if (user.getId() != album.getUserId()) {
 					response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+					response.getWriter().println("Sorry, something went wrong. Try again.");
 					return;
 				}
 				albumOrder.add(albumId);
 			} catch (NumberFormatException | NullPointerException e) {
 				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+				response.getWriter().println("Sorry, something went wrong. Try again.");
 				return;
 			} catch (SQLException e) {
 				response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+				response.getWriter().println("Internal server error. Try again.");
 				return;
 			}
 		}
@@ -89,6 +92,7 @@ public class OrderAlbums extends HttpServlet {
 				albumDAO.setAlbumPosition(albumOrder.get(i), i+1);
 			} catch (SQLException e) {
 				response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+				response.getWriter().println("Internal server error. Try again.");
 				return; //TODO Rollback?
 			}
 		}

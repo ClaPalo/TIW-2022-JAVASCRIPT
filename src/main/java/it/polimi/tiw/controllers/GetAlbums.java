@@ -47,6 +47,7 @@ public class GetAlbums extends HttpServlet {
 		
 		if (albumsAreMine == null || (!albumsAreMine.equals("true") && !albumsAreMine.equals("false"))) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			response.getWriter().println("Bad request, try again.");
 			return;
 		}
 		
@@ -60,6 +61,7 @@ public class GetAlbums extends HttpServlet {
 				albumsToSend = albumDAO.getAlbumsByUser(user.getId(), false);
 		} catch (SQLException e) {
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			response.getWriter().println("Internal server error, try again.");
 			return;
 		}
 		

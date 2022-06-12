@@ -95,7 +95,7 @@
 		              self.updateView(albums, self.myAlbumsContainer, true); // self visible by closure
 		            
 		          	} else {
-		            	self.myAlbumsAlert.textContent = unparsed_json;
+		            	self.myAlbumsAlert.textContent = unparsed_json; //TODO Lasciamo così o creiamo la classe error come negli altri elementi?
 		          	}
 	          	}
 			})
@@ -122,7 +122,7 @@
 		}
 		
 		this.updateView = function(arrayAlbums, container, areMyAlbums) {
-	      var elem, i, row, titlecell, anchor, titleText;
+	      var row, titlecell, anchor, titleText;
 	      container.innerHTML = ""; // empty the tables body
 	      var container_visibleinscope = container;
 		  var self = this;
@@ -180,9 +180,20 @@
 					}
 
 					makeCall("POST", "OrderAlbums", orderForm, (request) => {
-						if  (request.readyState === 1) {
-							let orderButtonToRemove = document.getElementById("orderButton");
-							orderButtonToRemove.parentNode.removeChild(orderButtonToRemove);
+						let message = request.responseText;
+						if  (request.readyState === 4) {
+							if (request.status === 200) {
+								clearErrors(myAlbumsContainer);
+								let orderButtonToRemove = document.getElementById("orderButton");
+								orderButtonToRemove.parentNode.removeChild(orderButtonToRemove);
+							} else {
+								let orderButton = document.getElementById("orderButton");
+								let errorMsg = document.createElement("p");
+								errorMsg.setAttribute("class", "error");
+								errorMsg.textContent = message;
+								errorMsg.style.color = "red";
+								orderButton.parentNode.insertBefore(errorMsg, orderButton.nextSibling);
+							}
 						}
 					});
 				});
@@ -580,7 +591,6 @@
 
 		this.show = function(albumId, albumName, images) {
 			this.formContainer.style.visibility = "visible";
-			self = this;
 			if (albumId !== null) {
 				this.formContainer.firstChild.firstChild.value = albumName;
 				let albumTag = document.createElement("input");
