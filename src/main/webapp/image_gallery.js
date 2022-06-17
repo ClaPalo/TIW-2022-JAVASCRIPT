@@ -68,7 +68,7 @@
 	function Username(_username, usernameContainer) {
 		this.username = _username;
 	    this.show = function() {
-	      usernameContainer.textContent = this.username;
+	      usernameContainer.textContent = decodeURIComponent(escape(this.username));
 	    }
 	}
 	
@@ -139,7 +139,7 @@
 	        titlecell = document.createElement("td");
 	        anchor = document.createElement("a");
 	        titlecell.appendChild(anchor);
-	   		titleText = document.createTextNode(album.title);
+	   		titleText = document.createTextNode(decodeURIComponent(escape(album.title)));
 	        anchor.appendChild(titleText);
 	        anchor.setAttribute("albumid", album.id);
 	        anchor.addEventListener("click", (e) => {
@@ -269,9 +269,9 @@
 		}
 		
 		this.update = function(album, owner) {
-			this.titleContainer.textContent = album.title;
+			this.titleContainer.textContent = decodeURIComponent(escape(album.title));
 			let ownerTag = document.createElement("p");
-			ownerTag.textContent = "Created by " + owner + " on " + album.dateOfCreation;
+			ownerTag.textContent = "Created by " + decodeURIComponent(escape(owner)) + " on " + album.dateOfCreation;
 			ownerTag.setAttribute("id", "id_owner_tag");
 			this.titleContainer.parentNode.insertBefore(ownerTag, this.titleContainer.nextSibling);
 		}
@@ -445,11 +445,11 @@
 			this.imageWindowContainer.insertBefore(imageTag, this.imageWindowContainer.firstChild);
 
 			var imageTitleTag = document.createElement("h1");
-			imageTitleTag.textContent = imageTitle;
+			imageTitleTag.textContent = decodeURIComponent(escape(imageTitle));
 			this.imageWindowContainer.insertBefore(imageTitleTag, this.imageWindowContainer.firstChild);
 
 			var descriptionTag = document.createElement("p");
-			descriptionTag.textContent = imageDesc;
+			descriptionTag.textContent = decodeURIComponent(escape(imageDesc));
 			imageTag.insertAdjacentElement("afterend", descriptionTag);
 			
 			commentsSection.loadComments(imageID);
@@ -501,11 +501,11 @@
 			        row = document.createElement("tr");
 			        usercell = document.createElement("td");
 			        row.appendChild(usercell);
-			        username = document.createTextNode(comment.username);
+			        username = document.createTextNode(decodeURIComponent(escape(comment.username)));
 			        usercell.appendChild(username);
 			        textcell = document.createElement("td");
 			        row.appendChild(textcell)
-			        text = document.createTextNode(comment.text);
+			        text = document.createTextNode(decodeURIComponent(escape(comment.text)));
 			        textcell.appendChild(text);
 			        
 			        self.commentsTable.appendChild(row);
@@ -599,7 +599,7 @@
 		this.show = function(albumId, albumName, images) {
 			this.formContainer.style.visibility = "visible";
 			if (albumId !== null) {
-				this.formContainer.firstChild.firstChild.value = albumName;
+				this.formContainer.firstChild.firstChild.value = decodeURIComponent(escape(albumName));
 				let albumTag = document.createElement("input");
 				albumTag.setAttribute("name", "albumId");
 				albumTag.setAttribute("value", albumId);
@@ -635,7 +635,8 @@
 						if (request.readyState === 4) {
 							if (request.status === 200) {
 								pageOrchestrator.refresh();
-								albumInfo.show(albumId, true);
+								if (albumId !== null)
+									albumInfo.show(albumId, true);
 								//albumThumbnails.loadImages(albumId);
 							} else {
 								let errorMsg = document.createElement("p");
