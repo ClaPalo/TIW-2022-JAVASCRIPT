@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -133,6 +134,12 @@ public class EditAlbum extends HttpServlet {
 			return;
 		}
 		
+		if (!isValidName(albumName)) {
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			response.getWriter().println("Invalid album name");
+			return;
+		}
+		
 		
 		albumIdNotParsed = request.getParameter("albumId");
 		if (albumIdNotParsed == null || albumIdNotParsed.isEmpty()) {
@@ -211,6 +218,15 @@ public class EditAlbum extends HttpServlet {
 		
 		response.setStatus(HttpServletResponse.SC_OK);
 		
+	}
+	
+	private boolean isValidName(String name) {
+		String nameRegex = "^[a-zA-Z0-9_]";
+	              
+		Pattern pat = Pattern.compile(nameRegex);
+		if (name == null)
+			return false;
+		return pat.matcher(name).matches();
 	}
 
 }

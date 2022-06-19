@@ -598,6 +598,7 @@
 
 		this.show = function(albumId, albumName, images) {
 			this.formContainer.style.visibility = "visible";
+			let self = this;
 			if (albumId !== null) {
 				this.formContainer.firstChild.firstChild.value = decodeURIComponent(escape(albumName));
 				let albumTag = document.createElement("input");
@@ -682,6 +683,8 @@
 				errorMessage = "Album name must have at least 1 character";
 			} else if (form.firstChild.value.length > 45) {
 				errorMessage = "Album name must not have more than 45 characters";
+			} else if (!/^\w/.test(form.firstChild.value)) {
+				errorMessage = "Invalid album name";
 			}
 
 			if (errorMessage !== null) {
