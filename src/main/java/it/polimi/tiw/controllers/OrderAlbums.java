@@ -93,7 +93,7 @@ public class OrderAlbums extends HttpServlet {
 			} catch (SQLException e) {
 				response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 				response.getWriter().println("Internal server error. Try again.");
-				return; //TODO Rollback?
+				return; 
 			}
 		}
 		

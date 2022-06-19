@@ -143,14 +143,12 @@
 	        anchor.appendChild(titleText);
 	        anchor.setAttribute("albumid", album.id);
 	        anchor.addEventListener("click", (e) => {
-	          // dependency via module parameter
 				pageOrchestrator.refresh();
 	          let albumID = e.target.getAttribute("albumid");
 			  if (areMyAlbums)
 	          	albumInfo.show(albumID, true);
 			  else
 				  albumInfo.show(albumID, false);
-	          //albumThumbnails.loadImages(albumID);
 	        }, false);
 	        anchor.href = "#";
 	        row.appendChild(titlecell);
@@ -495,7 +493,6 @@
 			var row, usercell, username, textcell, text;
 			var self = this;
 			this.reset();
-	      	//this.commentsTable.innerHTML = ""; // empty the tables body
 	      	if (comments.length > 0) {
 		      	comments.forEach(function(comment) {
 			        row = document.createElement("tr");
@@ -638,8 +635,8 @@
 								pageOrchestrator.refresh();
 								if (albumId !== null)
 									albumInfo.show(albumId, true);
-								//albumThumbnails.loadImages(albumId);
 							} else {
+								clearErrors(self.formContainer);
 								let errorMsg = document.createElement("p");
 								errorMsg.style.color = "red";
 								errorMsg.textContent = message;
@@ -683,7 +680,7 @@
 				errorMessage = "Album name must have at least 1 character";
 			} else if (form.firstChild.value.length > 45) {
 				errorMessage = "Album name must not have more than 45 characters";
-			} else if (!/^\w/.test(form.firstChild.value)) {
+			} else if (form.firstChild.value[0] === " ") {
 				errorMessage = "Invalid album name";
 			}
 
