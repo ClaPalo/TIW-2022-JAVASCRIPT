@@ -23,7 +23,7 @@ public class AlbumDAO {
 		
 		String operator = thisUser ? "=" : "<>"; 
 		
-		String prepared_query = "SELECT * FROM Album JOIN OrderTable ON Album.idAlbum = OrderTable.albumId WHERE idUser" + operator + "? ORDER BY position ASC, date DESC";
+		String prepared_query = "SELECT * FROM Album WHERE idUser" + operator + "? ORDER BY position ASC, date DESC";
 		
 		PreparedStatement preparedStatement = this.connection.prepareStatement(prepared_query);
 		preparedStatement.setInt(1, userId);
@@ -65,7 +65,8 @@ public class AlbumDAO {
 	}
 	
 	public void setAlbumPosition(int albumId, int position) throws SQLException {
-		String prepared_update = "UPDATE OrderTable SET position = ? WHERE albumId = ?";
+		
+		String prepared_update = "UPDATE Album SET position = ? WHERE idAlbum = ?";
 		
 		PreparedStatement preparedStatement = this.connection.prepareStatement(prepared_update);
 		preparedStatement.setInt(1, position);
@@ -92,9 +93,8 @@ public class AlbumDAO {
 	}
 	
 	public int createEmptyAlbum(String name, int userId) throws SQLException {
-		String prepared_query1 = "INSERT INTO Album (title, date, idUser) VALUES (?, CURRENT_TIMESTAMP(),?)";
-		String prepared_query2 = "INSERT INTO OrderTable (albumId, position) VALUES (?, 0)";
-
+		String prepared_query1 = "INSERT INTO Album (title, date, idUser, position) VALUES (?, CURRENT_TIMESTAMP(), ?, 0)";
+		
 		PreparedStatement preparedStatement = this.connection.prepareStatement(prepared_query1);
 		preparedStatement.setString(1, name);
 		preparedStatement.setInt(2, userId);
@@ -102,11 +102,6 @@ public class AlbumDAO {
 		preparedStatement.executeUpdate();
 		
 		int albumId = getLastAlbumIdByUser(userId);
-		
-		PreparedStatement preparedStatement2 = this.connection.prepareStatement(prepared_query2);
-		preparedStatement2.setInt(1, albumId);
-		
-		preparedStatement2.executeUpdate();
 		
 		return albumId;
 	}
