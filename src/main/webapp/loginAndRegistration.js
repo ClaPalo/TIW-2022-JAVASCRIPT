@@ -10,6 +10,7 @@
 	var confirmPassword = document.getElementById("confirmPassword");
 	var mail = document.getElementById("mail");
 	var title = document.getElementById("title");
+	var username = document.getElementById("username");
 	
 	var readyToSend;
 	
@@ -145,7 +146,6 @@
 			}
 		})
 		
-		//TODO Aggiungi a checkvalidity un controllo che non permetta di mandare il form se c'è qualche errore
 
 		registrationPassword.addEventListener("focusout", (e)=>{
 			let passwordError = document.getElementById("passwordError");
@@ -206,7 +206,21 @@
 				error.style.display = "none";
 			}
 		})
-	
+
+		username.addEventListener("focusout", (e)=>{
+			let error = document.getElementById("usernameError");
+			if (username.value[0] === " ") {
+				error.textContent = "Username can't begin with a space";
+				error.style.display = "inline";
+			}
+		})
+
+		username.addEventListener("input", (e)=>{
+			let error = document.getElementById("usernameError");
+			if (username.value[0] !== " ") {
+				error.style.display = "none";
+			}
+		})
 	
 
 }) ();

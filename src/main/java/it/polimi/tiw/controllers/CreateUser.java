@@ -35,7 +35,6 @@ public class CreateUser extends HttpServlet {
     }
     
     public void init() throws ServletException {
-    	//TODO Usa handler
     	try {
 			ServletContext context = getServletContext();
 			String driver = context.getInitParameter("dbDriver");
@@ -55,7 +54,7 @@ public class CreateUser extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+		doPost(request, response);
 	}
 
 	/**
@@ -72,6 +71,12 @@ public class CreateUser extends HttpServlet {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			response.getWriter().println("You must enter all the required data");
 			System.out.println("Missing data");
+			return;
+		}
+		
+		if (username.startsWith(" ")) {
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			response.getWriter().println("Invalid username");
 			return;
 		}
 		
